@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*; 
 public class Display extends JComponent{
+    Bridge b;
     public Display(){
         super();
     }
@@ -9,7 +10,13 @@ public class Display extends JComponent{
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.setColor(Color.RED);
-        g.fillRect(100,100,100,100);
+        if (b==null) {
+            System.out.println("Value of bridge is null");
+            return;
+        }
+    }
+    public void drawBridge(Bridge b) {
+        this.b = b;
+        this.repaint();
     }
 }
