@@ -23,7 +23,7 @@ public class Bridge implements Comparable {
             Node n = new Node(xcord,ycord,false);
             nodelist.add(n);
         }
-        //M = 2J - R
+        //M = 2J - R for static determinant
         int membercount = (2*nodes)-forces.size();
         for(int i=0;i<membercount;i++) {
             Node n1 = nodelist.get((int)(Math.random()*(double)nodelist.size()));
