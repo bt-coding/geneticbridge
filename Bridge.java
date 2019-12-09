@@ -5,15 +5,17 @@ public class Bridge implements Comparable {
     ArrayList<ArrayList<Node>> members;
     ArrayList<Force> forces;
     double score;
-    public Bridge() {
+    public Bridge(ArrayList<Force> forces) {
         nodelist = new ArrayList<Node>();
         members = new ArrayList<ArrayList<Node>>();
+        this.forces = forces;
         score = -1;
     }
-    public Bridge(int nodes, double[] cords) {
+    public Bridge(int nodes, double[] cords, ArrayList<Force> forces) {
         //cords should be in the form of minx,miny,maxx,maxy
         nodelist = new ArrayList<Node>();
         members = new ArrayList<ArrayList<Node>>();
+        this.forces = forces;
         score = -1;
         for(int i=0;i<nodes;i++) {
             double xcord = (Math.random()*(double)cords[2])-(double)cords[0];
@@ -21,8 +23,31 @@ public class Bridge implements Comparable {
             Node n = new Node(xcord,ycord);
             nodelist.add(n);
         }
-        
-        
+        //M = 2J - R
+        int membercount = (2*nodes)-forces.size();
+        for(int i=0;i<membercount;i++) {
+            Node n1 = nodelist.get((int)(Math.random()*(double)nodelist.size()));
+            Node n2 = nodelist.get((int)(Math.random()*(double)nodelist.size()));
+            while(n2 == n1) {
+                n2 = nodelist.get((int)(Math.random()*(double)nodelist.size()));
+            }
+            ArrayList<Node> member = new ArrayList<Node>();
+            member.add(n1);
+            member.add(n2);
+            boolean existing = true;
+            while(existing) {
+                boolean exist = false;
+                for(ArrayList<Node> membertemp : members) {
+                    if (membertemp==member) {
+                        exist = true;
+                    }
+                }
+                if (exist==false) {
+                    existing = false;
+                }
+            }
+            members.add(member);
+        }
     }
     public void generateRandom() {
         
