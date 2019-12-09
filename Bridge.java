@@ -20,7 +20,7 @@ public class Bridge implements Comparable {
         for(int i=0;i<nodes;i++) {
             double xcord = (Math.random()*(double)cords[2])-(double)cords[0];
             double ycord = (Math.random()*(double)cords[3])-(double)cords[1];
-            Node n = new Node(xcord,ycord);
+            Node n = new Node(xcord,ycord,false);
             nodelist.add(n);
         }
         //M = 2J - R

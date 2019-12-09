@@ -1,9 +1,11 @@
 public class Node {
     double x;
     double y;
-    public Node(double x, double y) {
+    boolean locked;
+    public Node(double x, double y, boolean lock) {
         this.x = x;
         this.y = y;
+        locked = lock;
     }
     public void setX(double x) {
         this.x = x;
@@ -11,11 +13,20 @@ public class Node {
     public void setY(double y) {
         this.y = y;
     }
+    public void lock() {
+        locked = true;
+    }
+    public void unlock() {
+        locked = false;
+    }
     public double getX() {
         return x;
     }
     public double getY() {
         return y;
+    }
+    public boolean getLocked() {
+        return locked;
     }
     public double[] getPoint() {
         return new double[]{x,y};
