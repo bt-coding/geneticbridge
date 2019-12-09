@@ -95,4 +95,10 @@ public class Bridge implements Comparable {
         }
         return 0;
     }
+    public void setNodes(ArrayList<Node> nodes){
+        nodelist = nodes;
+    }
+    public void setMembers(ArrayList<ArrayList<Node>> m){
+        members = m;
+    }
 }
