@@ -34,12 +34,12 @@ public class DisplayInit {
         
         MouseClicker mlistener = new MouseClicker(display);
         MouseScrollWheelThread mscrollthread = new MouseScrollWheelThread(display);
-        display.addMouseListener(mlistener);
-        display.addMouseWheelListener(mscrollthread);
+        panel.addMouseListener(mlistener);
+        panel.addMouseWheelListener(mscrollthread);
         
         KeyboardThread keylistener = new KeyboardThread(display);
-        frame.addKeyListener(keylistener);
-        
+        panel.addKeyListener(keylistener);
+        panel.setFocusable(true);
         
         
         Bridge sample = new Bridge(null);

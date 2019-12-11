@@ -12,6 +12,7 @@ public class Display extends JPanel implements ActionListener {
     int zoomscale; //10-20 is pretty normal zoom
     int xoffset;
     int yoffset;
+    int[] dirmove; //index 0 for x, index 1 for y
     Bridge b;
     public Display(JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height){
         super();
@@ -25,8 +26,9 @@ public class Display extends JPanel implements ActionListener {
         this.height = height;
         toolselected = 0;
         zoomscale = 15;
-        xoffset = 1;
-        yoffset = 1;
+        xoffset = 0;
+        yoffset = 0;
+        dirmove = new int[2];
     }
     public void draw(){
         width = this.getWidth();
@@ -42,10 +44,10 @@ public class Display extends JPanel implements ActionListener {
 
         g.setColor(new Color(100,100,100));
         for(int r=0;r<((double)height/(double)zoomscale)+1;r++) {
-            g.drawLine(0, (r*zoomscale)+(zoomscale%yoffset), width, (r*zoomscale)+(zoomscale%yoffset));
+            g.drawLine(0, (r*zoomscale)+(yoffset%zoomscale), width, (r*zoomscale)+(yoffset%zoomscale));
         }
         for(int w=0;w<((double)width/(double)zoomscale)+1;w++) {
-            g.drawLine((w*zoomscale)+(zoomscale%xoffset), 0, (w*zoomscale)+(zoomscale%xoffset), height);
+            g.drawLine((w*zoomscale)+(xoffset%zoomscale), 0, (w*zoomscale)+(xoffset%zoomscale), height);
         }
         
         
@@ -76,6 +78,38 @@ public class Display extends JPanel implements ActionListener {
             zoomscale+=amount*(Math.sqrt(zoomscale));
         } else {
             zoomscale = 4;
+        }
+        draw();
+    }
+    public void keypressed(int[] key) {
+        //0=left,1=up,2=right,3=down
+        if (key[0]==1) {
+            xoffset+=10;
+        } 
+        if (key[1]==1) {
+            yoffset+=10;
+        }
+        if (key[2]==1) {
+            xoffset-=10;
+        }
+        if (key[3]==1) {
+            yoffset-=10;
+        }
+        draw();
+    }
+    public void keyreleased(int[] key) {
+        //0=left,1=up,2=right,3=down
+        if (key[0]==1) {
+            xoffset-=10;
+        } 
+        if (key[1]==1) {
+            yoffset-=10;
+        }
+        if (key[2]==1) {
+            xoffset+=10;
+        }
+        if (key[3]==1) {
+            yoffset+=10;
         }
         draw();
     }
