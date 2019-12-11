@@ -2,18 +2,21 @@ import java.util.*;
 
 public class Bridge implements Comparable {
     ArrayList<Node> nodelist;
+    ArrayList<Node> lockednodes;
     ArrayList<ArrayList<Node>> members;
     ArrayList<Force> forces;
     double score;
     public Bridge(ArrayList<Force> forces) {
         nodelist = new ArrayList<Node>();
+        lockednodes = new ArrayList<Node>();
         members = new ArrayList<ArrayList<Node>>();
         this.forces = forces;
         score = -1;
     }
-    public Bridge(int nodes, double[] cords, ArrayList<Force> forces) {
+    public Bridge(int nodes, double[] cords, ArrayList<Force> forces, ArrayList<Node> lockednodes) {
         //cords should be in the form of minx,miny,maxx,maxy
         nodelist = new ArrayList<Node>();
+        this.lockednodes = lockednodes;
         members = new ArrayList<ArrayList<Node>>();
         this.forces = forces;
         score = -1;
