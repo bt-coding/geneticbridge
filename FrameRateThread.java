@@ -17,4 +17,4 @@ public class FrameRateThread implements Runnable{
             }
         }
     }
-}
+}   

@@ -49,5 +49,7 @@ public class DisplayInit {
         panel.setVisible(true);
         frame.show();
         
+        FrameRateThread frt = new FrameRateThread(display,60);
+        (new Thread(frt)).start();
     }
 }

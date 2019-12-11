@@ -12,7 +12,7 @@ public class Display extends JPanel implements ActionListener {
     int zoomscale; //10-20 is pretty normal zoom
     int xoffset;
     int yoffset;
-    int[] dirmove; //index 0 for x, index 1 for y
+    int[] dirmove; //0=left,1=up,2=right,3=down
     Bridge b;
     public Display(JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height){
         super();
@@ -28,12 +28,26 @@ public class Display extends JPanel implements ActionListener {
         zoomscale = 15;
         xoffset = 0;
         yoffset = 0;
-        dirmove = new int[2];
+        dirmove = new int[4];
     }
     public void draw(){
         width = this.getWidth();
-        height = this.getHeight();        
-        super.repaint();
+        height = this.getHeight(); 
+        this.repaint();
+    }
+    public void update() {
+        if (dirmove[0]==1) {
+            xoffset+=10;
+        }
+        if (dirmove[1]==1) {
+            yoffset+=10;
+        }
+        if (dirmove[2]==1) {
+            xoffset-=10;
+        }
+        if (dirmove[3]==1) {
+            yoffset-=10;
+        }
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -50,7 +64,8 @@ public class Display extends JPanel implements ActionListener {
             g.drawLine((w*zoomscale)+(xoffset%zoomscale), 0, (w*zoomscale)+(xoffset%zoomscale), height);
         }
         
-        
+        g.setColor(Color.RED);
+        g.fillOval(0+xoffset, 0+yoffset, 5*zoomscale, 5*zoomscale);
         
         
     }
@@ -81,36 +96,14 @@ public class Display extends JPanel implements ActionListener {
         }
         draw();
     }
-    public void keypressed(int[] key) {
+    public void keypressed(int key) {
         //0=left,1=up,2=right,3=down
-        if (key[0]==1) {
-            xoffset+=10;
-        } 
-        if (key[1]==1) {
-            yoffset+=10;
-        }
-        if (key[2]==1) {
-            xoffset-=10;
-        }
-        if (key[3]==1) {
-            yoffset-=10;
-        }
+        dirmove[key]=1;
         draw();
     }
-    public void keyreleased(int[] key) {
+    public void keyreleased(int key) {
         //0=left,1=up,2=right,3=down
-        if (key[0]==1) {
-            xoffset-=10;
-        } 
-        if (key[1]==1) {
-            yoffset-=10;
-        }
-        if (key[2]==1) {
-            xoffset+=10;
-        }
-        if (key[3]==1) {
-            yoffset+=10;
-        }
+        dirmove[key]=0;
         draw();
     }
     public void offset(int x, int y) {

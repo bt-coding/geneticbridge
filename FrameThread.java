@@ -4,6 +4,7 @@ public class FrameThread implements Runnable{
         screen = s;
     }
     public void run(){
+        screen.update();
         screen.draw();
     }
 }
