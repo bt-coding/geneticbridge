@@ -65,7 +65,7 @@ public class Display extends JPanel implements ActionListener {
         }
         
         g.setColor(Color.RED);
-        g.fillOval(0+xoffset, 0+yoffset, 5*zoomscale, 5*zoomscale);
+        g.fillOval(-3+xoffset, -3+yoffset, 6*zoomscale, 6*zoomscale);
         
         
     }
