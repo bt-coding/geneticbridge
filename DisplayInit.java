@@ -37,6 +37,13 @@ public class DisplayInit {
         display.addMouseListener(mlistener);
         display.addMouseWheelListener(mscrollthread);
         
+        KeyboardThread keylistener = new KeyboardThread(display);
+        frame.addKeyListener(keylistener);
+        
+        
+        
+        Bridge sample = new Bridge(null);
+        
         
         frame.add(panel);
         panel.setVisible(true);

@@ -10,6 +10,8 @@ public class Display extends JPanel implements ActionListener {
     int toolselected; //0=nodebutton, 1=memberbutton, 2=force
     final String[] toolnames = new String[]{"Node","Member","Force"};
     int zoomscale; //10-20 is pretty normal zoom
+    int xoffset;
+    int yoffset;
     Bridge b;
     public Display(JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height){
         super();
@@ -23,6 +25,8 @@ public class Display extends JPanel implements ActionListener {
         this.height = height;
         toolselected = 0;
         zoomscale = 15;
+        xoffset = 1;
+        yoffset = 1;
     }
     public void draw(){
         width = this.getWidth();
@@ -38,10 +42,10 @@ public class Display extends JPanel implements ActionListener {
 
         g.setColor(new Color(100,100,100));
         for(int r=0;r<((double)height/(double)zoomscale)+1;r++) {
-            g.drawLine(0, r*zoomscale, width, r*zoomscale);
+            g.drawLine(0, (r*zoomscale)+(zoomscale%yoffset), width, (r*zoomscale)+(zoomscale%yoffset));
         }
         for(int w=0;w<((double)width/(double)zoomscale)+1;w++) {
-            g.drawLine(w*zoomscale, 0, w*zoomscale, height);
+            g.drawLine((w*zoomscale)+(zoomscale%xoffset), 0, (w*zoomscale)+(zoomscale%xoffset), height);
         }
         
         
@@ -68,7 +72,16 @@ public class Display extends JPanel implements ActionListener {
         
     }
     public void scroll(int amount) {
-        zoomscale+=amount;
+        if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 4)) {
+            zoomscale+=amount*(Math.sqrt(zoomscale));
+        } else {
+            zoomscale = 4;
+        }
+        draw();
+    }
+    public void offset(int x, int y) {
+        xoffset+=x;
+        yoffset+=y;
         draw();
     }
 }
