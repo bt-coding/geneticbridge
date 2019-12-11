@@ -7,10 +7,10 @@ public class Main{
         frame.setUndecorated(false);
         
         int frameRate = 32;
-        Display screen = new Display();
+        //Display screen = new Display();
         
-        frame.add(screen);
-        frame.setVisible(true);
-        new Thread(new FrameRateThread(screen,frameRate)).start();
+        //frame.add(screen);
+        //frame.setVisible(true);
+        //new Thread(new FrameRateThread(screen,frameRate)).start();
     }
 }   

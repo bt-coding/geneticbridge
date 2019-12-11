@@ -32,6 +32,12 @@ public class DisplayInit {
         display.setVisible(true);
         display.draw();
         
+        MouseClicker mlistener = new MouseClicker(display);
+        MouseScrollWheelThread mscrollthread = new MouseScrollWheelThread(display);
+        display.addMouseListener(mlistener);
+        display.addMouseWheelListener(mscrollthread);
+        
+        
         frame.add(panel);
         panel.setVisible(true);
         frame.show();

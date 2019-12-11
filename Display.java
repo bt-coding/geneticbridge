@@ -8,6 +8,7 @@ public class Display extends JPanel implements ActionListener {
     int height;
     int width;
     int toolselected; //0=nodebutton, 1=memberbutton, 2=force
+    final String[] toolnames = new String[]{"Node","Member","Force"};
     int zoomscale; //10-20 is pretty normal zoom
     Bridge b;
     public Display(JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height){
@@ -24,6 +25,8 @@ public class Display extends JPanel implements ActionListener {
         zoomscale = 15;
     }
     public void draw(){
+        width = this.getWidth();
+        height = this.getHeight();        
         super.repaint();
     }
     public void paintComponent(Graphics g){
@@ -32,13 +35,18 @@ public class Display extends JPanel implements ActionListener {
             //System.out.println("Value of bridge is null");
             //return;
         }
+
         g.setColor(new Color(100,100,100));
-        for(int r=0;r<height/zoomscale;r++) {
+        for(int r=0;r<((double)height/(double)zoomscale)+1;r++) {
             g.drawLine(0, r*zoomscale, width, r*zoomscale);
         }
-        for(int w=0;w<width/15;w++) {
+        for(int w=0;w<((double)width/(double)zoomscale)+1;w++) {
             g.drawLine(w*zoomscale, 0, w*zoomscale, height);
         }
+        
+        
+        
+        
     }
     public void drawBridge(Bridge b) {
         this.b = b;
@@ -53,8 +61,14 @@ public class Display extends JPanel implements ActionListener {
         } else if (src == forcebutton) {
             toolselected = 2;
         }
+        draw();
     }
     public void mouseClicked(double x, double y) {
-     
+        
+        
+    }
+    public void scroll(int amount) {
+        zoomscale+=amount;
+        draw();
     }
 }

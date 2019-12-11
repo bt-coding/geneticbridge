@@ -11,8 +11,9 @@ public class MouseClicker implements MouseListener {
         Point mpoint = MouseInfo.getPointerInfo().getLocation();
         double mx = mpoint.getX();
         double my = mpoint.getY();
-        double fx = display.getX();
-        double fy = display.getY();
+        Point dpoint = display.getLocationOnScreen();
+        double fx = dpoint.getX();
+        double fy = dpoint.getY();
         display.mouseClicked(mx-fx, my-fy);
     }
     public void mouseEntered(MouseEvent e) {
