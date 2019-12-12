@@ -25,7 +25,9 @@ public class DisplayInit {
         
         panel.add(controlpanel, BorderLayout.NORTH);
         
-        Display display = new Display(nodebutton, memberbutton, forcebutton, WIDTH, HEIGHT);
+        controlpanel.setFocusable(false);
+        
+        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, WIDTH, HEIGHT);
         
         panel.add(display, BorderLayout.CENTER);
         

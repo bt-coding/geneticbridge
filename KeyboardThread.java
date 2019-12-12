@@ -20,6 +20,8 @@ public class KeyboardThread extends KeyAdapter {
         } else if (key == KeyEvent.VK_DOWN) {
             display.keypressed(3);
             //display.offset(0,-10);
+        } else if (key == KeyEvent.VK_SPACE) {
+            display.goHome();
         }
     }
     public void keyReleased(KeyEvent e) {

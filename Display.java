@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*; 
 import java.awt.event.*;
 public class Display extends JPanel implements ActionListener {
+    JPanel superpanel;
     JButton nodebutton;
     JButton memberbutton;
     JButton forcebutton;
@@ -14,8 +15,9 @@ public class Display extends JPanel implements ActionListener {
     int yoffset;
     int[] dirmove; //0=left,1=up,2=right,3=down
     Bridge b;
-    public Display(JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height){
+    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height){
         super();
+        this.superpanel = superpannel;
         this.nodebutton = nodebutton;
         this.memberbutton = memberbutton;
         this.forcebutton = forcebutton;
@@ -82,6 +84,7 @@ public class Display extends JPanel implements ActionListener {
         } else if (src == forcebutton) {
             toolselected = 2;
         }
+        superpanel.requestFocus();
         draw();
     }
     public void mouseClicked(double x, double y) {
@@ -110,5 +113,9 @@ public class Display extends JPanel implements ActionListener {
         xoffset+=x;
         yoffset+=y;
         draw();
+    }
+    public void goHome() {
+        xoffset = 0;
+        yoffset = 0;
     }
 }
