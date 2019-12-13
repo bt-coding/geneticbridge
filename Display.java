@@ -15,7 +15,7 @@ public class Display extends JPanel implements ActionListener {
     int yoffset;
     int[] dirmove; //0=left,1=up,2=right,3=down
     Bridge b;
-    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height){
+    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
         this.nodebutton = nodebutton;
@@ -31,6 +31,7 @@ public class Display extends JPanel implements ActionListener {
         xoffset = 0;
         yoffset = 0;
         dirmove = new int[4];
+        this.b = b;
     }
     public void draw(){
         width = this.getWidth();
@@ -54,8 +55,8 @@ public class Display extends JPanel implements ActionListener {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         if (b==null) {
-            //System.out.println("Value of bridge is null");
-            //return;
+            System.out.println("Value of bridge is null");
+            return;
         }
 
         g.setColor(new Color(100,100,100));
@@ -67,8 +68,16 @@ public class Display extends JPanel implements ActionListener {
         }
         
         g.setColor(Color.RED);
-        g.fillOval(-3+xoffset, -3+yoffset, 6*zoomscale, 6*zoomscale);
+        for(Node n : b.getNodes()) {
+            //System.out.println(n.getX()+","+n.getY());
+            double xcord = zoomscale*(n.getX()+xoffset);
+            double ycord = zoomscale*(n.getY()+yoffset);
+            g.fillOval((int)xcord, (int)ycord, 2*zoomscale, 2*zoomscale);
+        }
         
+        g.setColor(Color.GREEN);
+        g.fillOval(-2+xoffset, -2+yoffset, 4*zoomscale, 4*zoomscale);
+        System.out.println(zoomscale);
         
     }
     public void drawBridge(Bridge b) {

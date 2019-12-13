@@ -27,7 +27,13 @@ public class DisplayInit {
         
         controlpanel.setFocusable(false);
         
-        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, WIDTH, HEIGHT);
+        ArrayList<Force> forces = new ArrayList<Force>();
+        
+        Bridge bridge = new Bridge(30,new double[]{-400,-200,400,200},forces,null);
+        
+        
+        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, WIDTH, HEIGHT, bridge);
+        
         
         panel.add(display, BorderLayout.CENTER);
         
