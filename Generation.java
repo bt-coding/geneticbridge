@@ -2,16 +2,14 @@ import java.util.*;
 public class Generation{
     ArrayList<Bridge> gen;
     double genSize;
-    double numGens;
     int numBridgeNodes;
     double[] bridgeDimentions;
     ArrayList<Force> bridgeForces;
     Bridge best;
     ArrayList<Node> lockednodes;
     double mutationRate;
-    public Generation(double gs,double ng,int nbn,double[] bd,ArrayList<Force> bf,ArrayList<Node> ln,double mr){
+    public Generation(double gs,int nbn,double[] bd,ArrayList<Force> bf,ArrayList<Node> ln,double mr){
         genSize = gs;
-        numGens = ng;
         numBridgeNodes = nbn;
         bridgeDimentions = bd;
         bridgeForces = bf;
@@ -84,12 +82,20 @@ public class Generation{
         //Merges the 2 node point lists
         for(int i = 0; i < a.nodelist.size();i++){
             if(Math.random() < segmentLength || i == a.nodelist.size()-1){
-                for(int c = start; c < i; c++){
+                for(int c = start; c <= i; c++){
                     if(aNodes){
                         newPoints.add(a.nodelist.get(c));
                     }
                     else{
                         newPoints.add(b.nodelist.get(c));
+                        for(int z = 0; z < newMembers.size();z++){
+                            if(newMembers.get(z).get(0) == a.nodelist.get(c)){
+                                newMembers.get(z).set(0,b.nodelist.get(c));
+                            }
+                            else if(newMembers.get(z).get(1) == a.nodelist.get(c)){
+                                newMembers.get(z).set(1,b.nodelist.get(c));
+                            }
+                        }
                     }
                 }
                 aNodes = !aNodes;
@@ -99,8 +105,8 @@ public class Generation{
         // mutates the newly formed nodeList by slightly changing the node locations
         for(Node old: newPoints){
             if(Math.random() < mutationRate){
-                Node NEW = new Node(old.x*(Math.random()/20),old.y*(Math.random()/20),old.locked);
-                old = NEW;
+                old.x *= 1+(Math.random()/10)-0.05;
+                old.y *= 1+(Math.random()/10)-0.05;
             }
         }
         newBridge.nodelist = newPoints;
