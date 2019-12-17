@@ -26,9 +26,9 @@ public class DisplayInit {
         controlpanel.add(memberbutton);
         controlpanel.add(forcebutton);
         controlpanel.add(erasebutton);
-        
+        controlpanel.add(homebutton);
         controlpanel.add(clearbutton);
-        
+                
         panel.add(controlpanel, BorderLayout.NORTH);
         
         controlpanel.setFocusable(false);
@@ -38,7 +38,7 @@ public class DisplayInit {
         Bridge bridge = new Bridge(30,new double[]{-400,-200,400,200},forces,null);
         
         
-        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, WIDTH, HEIGHT, bridge);
+        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, WIDTH, HEIGHT, bridge);
         
         
         panel.add(display, BorderLayout.CENTER);

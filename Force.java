@@ -1,30 +1,37 @@
 public class Force {
-    double[] location; //x,y
-    double value;
     Node node;
-    public Force(double x, double y, double val) {
-        location = new double[]{x,y};
-        value = val;
+    double value;
+    int direction;
+    public Force(Node n, double val, int dir) {
+        this.node = n;
+        this.value = val;
+        this.direction = dir;
     }
     public double getX() {
-        return location[0];
+        return node.getX();
     }
     public double getY() {
-        return location[1];
+        return node.getY();
     }
     public double[] getLocation() {
-        return location;
+        return node.getPoint();
     }
     public double getValue() {
         return value;
     }
     public int getDirection() {
-        if (value>0) {
-            return 1;
-        } else if (value==0) {
-            return 0;
-        } else {
-            return -1;
-        }
+        return direction;
+    }
+    public Node getNode() {
+        return node;
+    }
+    public void setNode(Node n) {
+        this.node = n;
+    }
+    public void setValue(double d) {
+        this.value = d;
+    }
+    public void setDirection(int dir) {
+        this.direction=dir;
     }
 }

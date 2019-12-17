@@ -22,6 +22,8 @@ public class KeyboardThread extends KeyAdapter {
             //display.offset(0,-10);
         } else if (key == KeyEvent.VK_SPACE) {
             display.goHome();
+        } else if (key == KeyEvent.VK_SHIFT) {
+            display.lock();
         }
     }
     public void keyReleased(KeyEvent e) {
@@ -38,6 +40,8 @@ public class KeyboardThread extends KeyAdapter {
         } else if (key == KeyEvent.VK_DOWN) {
             display.keyreleased(3);
             //display.offset(0,-10);
+        } else if (key == KeyEvent.VK_SHIFT) {
+            display.unlock();
         }
     }
 }

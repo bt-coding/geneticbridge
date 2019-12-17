@@ -4,6 +4,7 @@ public class Bridge implements Comparable {
     ArrayList<Node> nodelist;
     ArrayList<Node> lockednodes;
     ArrayList<ArrayList<Node>> members;
+    ArrayList<ArrayList<Node>> lockedmembers;
     ArrayList<Force> forces;
     double score;
     public Bridge(ArrayList<Force> forces) {
@@ -11,6 +12,13 @@ public class Bridge implements Comparable {
         lockednodes = new ArrayList<Node>();
         members = new ArrayList<ArrayList<Node>>();
         this.forces = forces;
+        score = -1;
+    }
+    public Bridge() {
+        nodelist = new ArrayList<Node>();
+        lockednodes = new ArrayList<Node>();
+        members = new ArrayList<ArrayList<Node>>();
+        forces = new ArrayList<Force>();
         score = -1;
     }
     public Bridge(int nodes, double[] cords, ArrayList<Force> forces, ArrayList<Node> lockednodes) {
@@ -55,10 +63,14 @@ public class Bridge implements Comparable {
     public void generateRandom() {
         
     }
-    public void addNode(Node n) {
-        nodelist.add(n);
+    public void addNode(Node n, boolean locked) {
+        if (locked) {
+            lockednodes.add(n);
+        } else {
+            nodelist.add(n);
+        }
     }
-    public void addMember(Node n1, Node n2, boolean externalnodes) {
+    public void addMember(Node n1, Node n2, boolean externalnodes, boolean locked) {
         //set externalnodes to true if the argument nodes are not direct references to the existing nodelist
         if (externalnodes) {
             for(Node node : nodelist) {
@@ -75,7 +87,11 @@ public class Bridge implements Comparable {
         ArrayList<Node> temp = new ArrayList<Node>();
         temp.add(n1);
         temp.add(n2);
-        members.add(temp);
+        if(locked) {
+            lockedmembers.add(temp);
+        } else {
+            members.add(temp);
+        }
     }
     public double getScore() {
         if (score != -1) {

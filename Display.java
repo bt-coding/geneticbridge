@@ -2,11 +2,17 @@ import javax.swing.*;
 import java.awt.*; 
 import java.awt.event.*;
 import java.util.*;
+import javax.imageio.*;
+import java.io.*;
+import java.awt.image.*;
 public class Display extends JPanel implements ActionListener {
     JPanel superpanel;
     JButton nodebutton;
     JButton memberbutton;
     JButton forcebutton;
+    JButton erasebutton;
+    JButton homebutton;
+    JButton clearbutton;
     int height;
     int width;
     int toolselected; //0=nodebutton, 1=memberbutton, 2=force
@@ -16,15 +22,23 @@ public class Display extends JPanel implements ActionListener {
     int yoffset;
     int[] dirmove; //0=left,1=up,2=right,3=down
     Bridge b;
-    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, int width, int height, Bridge b){
+    boolean locked;
+    BufferedImage lockimage;
+    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
         this.nodebutton = nodebutton;
         this.memberbutton = memberbutton;
         this.forcebutton = forcebutton;
+        this.erasebutton = erasebutton;
+        this.homebutton = homebutton;
+        this.clearbutton = clearbutton;
         nodebutton.addActionListener(this);
         memberbutton.addActionListener(this);
         forcebutton.addActionListener(this);
+        erasebutton.addActionListener(this);
+        homebutton.addActionListener(this);
+        clearbutton.addActionListener(this);
         this.width = width;
         this.height = height;
         toolselected = 0;
@@ -33,6 +47,12 @@ public class Display extends JPanel implements ActionListener {
         yoffset = 0;
         dirmove = new int[4];
         this.b = b;
+        try {
+            lockimage = ImageIO.read(new File("lock.png"));
+        } catch (Exception e) {
+            System.out.println("Failed to load lock image");
+            e.printStackTrace();
+        }
     }
     public void draw(){
         width = this.getWidth();
@@ -55,6 +75,7 @@ public class Display extends JPanel implements ActionListener {
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        Graphics original = g.create();
         Graphics2D g2d = (Graphics2D)(g);
         g2d.scale(zoomscale,zoomscale);
         
@@ -91,9 +112,14 @@ public class Display extends JPanel implements ActionListener {
             
         }
         
+        if (locked && (toolselected==0 || toolselected==1)) {
+            original.drawImage(lockimage,(int)MouseInfo.getPointerInfo().getLocation().getX(),(int)MouseInfo.getPointerInfo().getLocation().getY()-120,this);
+        }
+        
+        
         g2d.setColor(Color.GREEN);
         g2d.fillOval(-2+xoffset, -2+yoffset, 4, 4);
-        System.out.println(zoomscale);
+        //System.out.println(zoomscale);
         
     }
     public void drawBridge(Bridge b) {
@@ -108,20 +134,31 @@ public class Display extends JPanel implements ActionListener {
             toolselected = 1;
         } else if (src == forcebutton) {
             toolselected = 2;
+        } else if (src == erasebutton) {
+            toolselected = 3;
+        } else if (src == homebutton) {
+            xoffset=0;
+            yoffset=0;
+        } else if (src == clearbutton) {
+            b = new Bridge();
         }
+        
         superpanel.requestFocus();
         draw();
     }
     public void mouseClicked(double x, double y) {
-        
+        if (toolselected == 0) {
+            
+            
+        }
         
         
     }
     public void scroll(int amount) {
-        if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 2)) {
+        if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 1)) {
             zoomscale+=amount*(Math.sqrt(zoomscale));
         } else {
-            zoomscale = 2;
+            zoomscale = 1;
         }
         draw();
     }
@@ -143,5 +180,11 @@ public class Display extends JPanel implements ActionListener {
     public void goHome() {
         xoffset = 0;
         yoffset = 0;
+    }
+    public void lock() {
+        locked = true;
+    }
+    public void unlock() {
+        locked = false;
     }
 }
