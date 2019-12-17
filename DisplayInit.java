@@ -35,8 +35,8 @@ public class DisplayInit {
         
         ArrayList<Force> forces = new ArrayList<Force>();
         
-        Bridge bridge = new Bridge(30,new double[]{-400,-200,400,200},forces,null);
-        
+        //Bridge bridge = new Bridge(30,new double[]{-400,-200,400,200},forces,null);
+        Bridge bridge = new Bridge();
         
         Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, WIDTH, HEIGHT, bridge);
         
@@ -48,7 +48,7 @@ public class DisplayInit {
         
         MouseClicker mlistener = new MouseClicker(display);
         MouseScrollWheelThread mscrollthread = new MouseScrollWheelThread(display);
-        panel.addMouseListener(mlistener);
+        display.addMouseListener(mlistener);
         panel.addMouseWheelListener(mscrollthread);
         
         KeyboardThread keylistener = new KeyboardThread(display);

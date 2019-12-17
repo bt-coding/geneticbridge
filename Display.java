@@ -16,7 +16,7 @@ public class Display extends JPanel implements ActionListener {
     int height;
     int width;
     int toolselected; //0=nodebutton, 1=memberbutton, 2=force
-    final String[] toolnames = new String[]{"Node","Member","Force"};
+    final String[] toolnames = new String[]{"Node","Member","Force","Erase"};
     int zoomscale; //10-20 is pretty normal zoom
     int xoffset;
     int yoffset;
@@ -97,7 +97,14 @@ public class Display extends JPanel implements ActionListener {
             //System.out.println(n.getX()+","+n.getY());
             double xcord = (n.getX()+xoffset);
             double ycord = (n.getY()+yoffset);
-            g2d.fillOval((int)xcord-2, (int)ycord-2, 4, 4);
+            g2d.fillOval((int)xcord-3, (int)ycord-3, 6, 6);
+        }
+        g2d.setColor(Color.ORANGE);
+        for(Node n : b.getNodesLocked()) {
+            double xcord = (n.getX()+xoffset);
+            double ycord = (n.getY()+yoffset);
+            g2d.fillOval((int)xcord-3, (int)ycord-3,6,6);
+            
         }
         for(ArrayList<Node> m : b.getMembers()) {
             Node n1 = m.get(0);
@@ -148,7 +155,10 @@ public class Display extends JPanel implements ActionListener {
     }
     public void mouseClicked(double x, double y) {
         if (toolselected == 0) {
-            
+            double realx = (x/zoomscale)-xoffset;
+            double realy = (y/zoomscale)-yoffset;
+            Node newn = new Node(realx,realy,locked);
+            b.addNode(newn,locked);
             
         }
         

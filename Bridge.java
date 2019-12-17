@@ -24,6 +24,7 @@ public class Bridge implements Comparable {
     public Bridge(int nodes, double[] cords, ArrayList<Force> forces, ArrayList<Node> lockednodes) {
         //cords should be in the form of minx,miny,maxx,maxy
         nodelist = new ArrayList<Node>();
+        
         this.lockednodes = lockednodes;
         members = new ArrayList<ArrayList<Node>>();
         this.forces = forces;
@@ -101,6 +102,9 @@ public class Bridge implements Comparable {
     }
     public ArrayList<Node> getNodes() {
         return nodelist;
+    }
+    public ArrayList<Node> getNodesLocked() {
+        return lockednodes;
     }
     public ArrayList<ArrayList<Node>> getMembers() {
         return members;
