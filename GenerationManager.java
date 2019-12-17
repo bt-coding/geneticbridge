@@ -20,13 +20,13 @@ public class GenerationManager{
         maxNodes = mn;
     }
     public void runGens(){
-        for(int nn = 0; nn < maxNodes; nn++){
+        for(int nn = 1; nn < maxNodes; nn++){
             Generation gen = new Generation(genSize,nn,bridgeDimentions,bridgeForces,lockedNodes,mutationRate);
             for(int i = 0; i < numGens; i++){
                 gen.testGen();
                 gen.createNewGen();
             }
-            bestBridges.add();
+            bestBridges.add(gen.best);
         }
     }
 }
