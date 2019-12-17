@@ -14,6 +14,9 @@ public class DisplayInit {
         JButton nodebutton = new JButton("node");
         JButton memberbutton = new JButton("member");
         JButton forcebutton = new JButton("force");
+        JButton erasebutton = new JButton("erase");
+        JButton homebutton = new JButton("home");
+        JButton clearbutton = new JButton("clear");
         
         JPanel panel = new JPanel(new BorderLayout());
         
@@ -22,6 +25,9 @@ public class DisplayInit {
         controlpanel.add(nodebutton);
         controlpanel.add(memberbutton);
         controlpanel.add(forcebutton);
+        controlpanel.add(erasebutton);
+        
+        controlpanel.add(clearbutton);
         
         panel.add(controlpanel, BorderLayout.NORTH);
         

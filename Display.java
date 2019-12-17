@@ -55,41 +55,44 @@ public class Display extends JPanel implements ActionListener {
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D)(g);
+        g2d.scale(zoomscale,zoomscale);
+        
         if (b==null) {
             System.out.println("Value of bridge is null");
             return;
         }
 
-        g.setColor(new Color(100,100,100));
-        for(int r=0;r<((double)height/(double)zoomscale)+1;r++) {
-            g.drawLine(0, (r*zoomscale)+(yoffset%zoomscale), width, (r*zoomscale)+(yoffset%zoomscale));
+        g2d.setColor(new Color(100,100,100));
+        for(int r=0;r<(double)height;r+=20) {
+            g2d.drawLine(0, (r)+(yoffset), width, (r)+(yoffset));
         }
-        for(int w=0;w<((double)width/(double)zoomscale)+1;w++) {
-            g.drawLine((w*zoomscale)+(xoffset%zoomscale), 0, (w*zoomscale)+(xoffset%zoomscale), height);
+        for(int w=0;w<(double)width;w+=20) {
+            g2d.drawLine((w)+(xoffset), 0, (w)+(xoffset), height);
         }
         
-        g.setColor(Color.RED);
+        g2d.setColor(Color.RED);
         for(Node n : b.getNodes()) {
             //System.out.println(n.getX()+","+n.getY());
-            double xcord = zoomscale*(n.getX()+xoffset);
-            double ycord = zoomscale*(n.getY()+yoffset);
-            g.fillOval((int)xcord, (int)ycord, 2*zoomscale, 2*zoomscale);
+            double xcord = (n.getX()+xoffset);
+            double ycord = (n.getY()+yoffset);
+            g2d.fillOval((int)xcord-2, (int)ycord-2, 4, 4);
         }
         for(ArrayList<Node> m : b.getMembers()) {
             Node n1 = m.get(0);
             Node n2 = m.get(1);
             
-            double x1 = zoomscale*(n1.getX()+xoffset);
-            double y1 = zoomscale*(n1.getY()+yoffset);
-            double x2 = zoomscale*(n2.getX()+xoffset);
-            double y2 = zoomscale*(n2.getY()+yoffset);
+            double x1 = (n1.getX()+xoffset);
+            double y1 = (n1.getY()+yoffset);
+            double x2 = (n2.getX()+xoffset);
+            double y2 = (n2.getY()+yoffset);
             
-            g.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
+            g2d.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
             
         }
         
-        g.setColor(Color.GREEN);
-        g.fillOval(-2+xoffset, -2+yoffset, 4*zoomscale, 4*zoomscale);
+        g2d.setColor(Color.GREEN);
+        g2d.fillOval(-2+xoffset, -2+yoffset, 4, 4);
         System.out.println(zoomscale);
         
     }
@@ -112,12 +115,13 @@ public class Display extends JPanel implements ActionListener {
     public void mouseClicked(double x, double y) {
         
         
+        
     }
     public void scroll(int amount) {
-        if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 4)) {
+        if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 2)) {
             zoomscale+=amount*(Math.sqrt(zoomscale));
         } else {
-            zoomscale = 4;
+            zoomscale = 2;
         }
         draw();
     }
