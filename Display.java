@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*; 
 import java.awt.event.*;
+import java.util.*;
 public class Display extends JPanel implements ActionListener {
     JPanel superpanel;
     JButton nodebutton;
@@ -73,6 +74,18 @@ public class Display extends JPanel implements ActionListener {
             double xcord = zoomscale*(n.getX()+xoffset);
             double ycord = zoomscale*(n.getY()+yoffset);
             g.fillOval((int)xcord, (int)ycord, 2*zoomscale, 2*zoomscale);
+        }
+        for(ArrayList<Node> m : b.getMembers()) {
+            Node n1 = m.get(0);
+            Node n2 = m.get(1);
+            
+            double x1 = zoomscale*(n1.getX()+xoffset);
+            double y1 = zoomscale*(n1.getY()+yoffset);
+            double x2 = zoomscale*(n2.getX()+xoffset);
+            double y2 = zoomscale*(n2.getY()+yoffset);
+            
+            g.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
+            
         }
         
         g.setColor(Color.GREEN);
