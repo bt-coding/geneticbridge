@@ -1,6 +1,9 @@
 public class Member {
-    Node n1;
-    Node n2;
+    private Node n1;
+    private Node n2;
+    //angle to horizon in radians
+    double angle;
+    double forceApplied;
     public Member(Node n1, Node n2) {
         this.n1 = n1;
         this.n2 = n2;

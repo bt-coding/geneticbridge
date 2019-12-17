@@ -1,6 +1,7 @@
 public class Force {
     double[] location; //x,y
     double value;
+    Node node;
     public Force(double x, double y, double val) {
         location = new double[]{x,y};
         value = val;
