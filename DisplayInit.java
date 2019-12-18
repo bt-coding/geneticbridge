@@ -38,7 +38,7 @@ public class DisplayInit {
         JPanel rightpanel = new JPanel();
         rightpanel.setLayout(new BoxLayout(rightpanel, BoxLayout.Y_AXIS));
         
-        JSlider nodesize = new JSlider(JSlider.HORIZONTAL,2,22,6);
+        JSlider nodesize = new JSlider(JSlider.HORIZONTAL,2,44,6);
         nodesize.setMajorTickSpacing(4);
         nodesize.setMinorTickSpacing(2);
         nodesize.setPaintTicks(true);

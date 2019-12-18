@@ -53,6 +53,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         yoffset = 0;
         dirmove = new int[4];
         zoomcords = new double[2];
+        nodesize=6;
         this.b = b;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
