@@ -15,6 +15,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     JButton homebutton;
     JButton clearbutton;
     JSlider nodesizeslider;
+    JSlider movespeedslider;
     int height;
     int width;
     int toolselected; //0=nodebutton, 1=memberbutton, 2=force
@@ -29,7 +30,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     BufferedImage lockimage;
     double[] zoomcords;
     int nodesize;
-    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, int width, int height, Bridge b){
+    double movespeed;
+    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, JSlider movespeedslider, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
         this.nodebutton = nodebutton;
@@ -39,6 +41,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         this.homebutton = homebutton;
         this.clearbutton = clearbutton;
         this.nodesizeslider = nodesizeslider;
+        this.movespeedslider = movespeedslider;
         nodebutton.addActionListener(this);
         memberbutton.addActionListener(this);
         forcebutton.addActionListener(this);
@@ -46,6 +49,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         homebutton.addActionListener(this);
         clearbutton.addActionListener(this);
         nodesizeslider.addChangeListener(this);
+        movespeedslider.addChangeListener(this);
         this.width = width;
         this.height = height;
         toolselected = 0;
@@ -55,15 +59,15 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         dirmove = new int[4];
         zoomcords = new double[2];
         nodesize=6;
+        movespeed=10;
         this.b = b;
         snap = false;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
         } catch (Exception e) {
-            System.out.println("Failed to load lock image");
+            System.err.println("Failed to load lock image");
             e.printStackTrace();
         }
-        superpanel.requestFocus();
     }
     public void draw(){
         width = this.getWidth();
@@ -71,7 +75,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         this.repaint();
     }
     public void update() {
-        double movement = 10.0/zoomscale;
+        double movement = movespeed/zoomscale;
         if (movement<1) {
             movement=1;
         }
@@ -103,7 +107,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         g2d.translate(-(double)zoomcords[0],-(double)zoomcords[1]);
         */
         if (b==null) {
-            System.out.println("Value of bridge is null");
+            System.err.println("Value of bridge is null");
             return;
         }
 
@@ -210,9 +214,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         
         
         g2d.setColor(Color.GREEN);
-        g2d.fillOval(-2+xoffset, -2+yoffset, 4, 4);
+        g2d.fillOval(-8+xoffset, -8+yoffset, 16, 16);
         //System.out.println(zoomscale);
-        
     }
     public void drawBridge(Bridge b) {
         this.b = b;
@@ -242,6 +245,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         if (source==nodesizeslider) {
             int tempval = source.getValue()/2;
             nodesize = tempval*2;
+        } else if (source==movespeedslider) {
+            movespeed = source.getValue();
         }
         superpanel.requestFocus();
     }

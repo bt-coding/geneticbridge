@@ -6,6 +6,14 @@ public class DisplayInit {
         int WIDTH = 1920;
         int HEIGHT = 1080;
         
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            System.err.println("Failed to set look and feel");
+            e.printStackTrace();
+        }
+        
+        
         JFrame frame = new JFrame("Genetic Truss Analysis");
         frame.setSize(WIDTH,HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,9 +55,24 @@ public class DisplayInit {
         JLabel nodesizetitle = new JLabel("Node Size");
         nodesizetitle.setFont(new Font("TimesRoman", Font.PLAIN, 22));
         
+        JSlider movespeed = new JSlider(JSlider.HORIZONTAL,1,50,10);
+        movespeed.setMajorTickSpacing(10);
+        movespeed.setMajorTickSpacing(5);
+        movespeed.setPaintTicks(true);
+        movespeed.setPaintLabels(true);
+        
+        JLabel movespeedtitle = new JLabel("Movement Speed");
+        movespeedtitle.setFont(new Font("TimesRoman", Font.PLAIN, 22));
+
+        Box.Filler spacer = new Box.Filler(new Dimension(0,0),new Dimension(0,50),new Dimension(0,50));
+        
+        rightpanel.add(spacer);
         rightpanel.add(nodesizetitle);
         rightpanel.add(nodesize);
         
+        rightpanel.add(spacer);
+        rightpanel.add(movespeedtitle);
+        rightpanel.add(movespeed);
         
         rightpanel.setBackground(Color.GRAY);
         
@@ -63,7 +86,7 @@ public class DisplayInit {
         Bridge bridge = new Bridge(100,new double[]{-800,-400,800,400},forces,new ArrayList<Node>());
         //Bridge bridge = new Bridge();
         
-        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, WIDTH, HEIGHT, bridge);
+        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, movespeed, WIDTH, HEIGHT, bridge);
         
         
         panel.add(display, BorderLayout.CENTER);
