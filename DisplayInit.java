@@ -1,13 +1,15 @@
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
+import com.seaglasslookandfeel.*;
 public class DisplayInit {
     public static void main(String[] args) {
         int WIDTH = 1920;
         int HEIGHT = 1080;
         
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
         } catch (Exception e) {
             System.err.println("Failed to set look and feel");
             e.printStackTrace();
