@@ -43,8 +43,8 @@ public class DisplayInit {
         
         controlpanel.setFocusable(false);
         
-        JPanel rightpanel = new JPanel();
-        rightpanel.setLayout(new BoxLayout(rightpanel, BoxLayout.Y_AXIS));
+        JPanel leftpanel = new JPanel();
+        leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
         
         JSlider nodesize = new JSlider(JSlider.HORIZONTAL,2,44,6);
         nodesize.setMajorTickSpacing(4);
@@ -66,17 +66,17 @@ public class DisplayInit {
 
         Box.Filler spacer = new Box.Filler(new Dimension(0,0),new Dimension(0,50),new Dimension(0,50));
         
-        rightpanel.add(spacer);
-        rightpanel.add(nodesizetitle);
-        rightpanel.add(nodesize);
+        leftpanel.add(spacer);
+        leftpanel.add(nodesizetitle);
+        leftpanel.add(nodesize);
         
-        rightpanel.add(spacer);
-        rightpanel.add(movespeedtitle);
-        rightpanel.add(movespeed);
+        leftpanel.add(spacer);
+        leftpanel.add(movespeedtitle);
+        leftpanel.add(movespeed);
         
-        rightpanel.setBackground(Color.GRAY);
+        leftpanel.setBackground(Color.GRAY);
         
-        panel.add(rightpanel, BorderLayout.WEST);
+        panel.add(leftpanel, BorderLayout.WEST);
         
     
         
