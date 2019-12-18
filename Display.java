@@ -25,6 +25,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     int[] dirmove; //0=left,1=up,2=right,3=down
     Bridge b;
     boolean locked;
+    boolean snap;
     BufferedImage lockimage;
     double[] zoomcords;
     int nodesize;
@@ -55,6 +56,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         zoomcords = new double[2];
         nodesize=6;
         this.b = b;
+        snap = false;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
         } catch (Exception e) {
@@ -140,25 +142,36 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             
         }
         
-        g2d.setColor(Color.GREEN);
+        g2d.setColor(new Color(0,155,0));
         if (toolselected == 0) {
-            double x = (int)MouseInfo.getPointerInfo().getLocation().getX();
-            double y = (int)MouseInfo.getPointerInfo().getLocation().getY();
+            Point mpoint = MouseInfo.getPointerInfo().getLocation();
+            double mx = mpoint.getX();
+            double my = mpoint.getY();
+            Point dpoint = this.getLocationOnScreen();
+            double fx = dpoint.getX();
+            double fy = dpoint.getY();
+            double x = mx-fx;
+            double y = my-fy;
             x -= width/2;
             y -= height/2;
             x/=zoomscale;
             y/=zoomscale;
             x += width/2;
             y += height/2;
-            double realx = x;
-            double realy = y;
-            g2d.drawOval((int)realx-(int)(nodesize/2),(int)realy-(int)(nodesize/2),nodesize,nodesize);
+            double realx = x-xoffset;
+            double realy = y-yoffset;
+            g2d.drawOval((int)realx+xoffset-(int)(nodesize/2),(int)realy+yoffset-(int)(nodesize/2),nodesize,nodesize);
         }
         
         
-        System.out.println(this.getX() + " " + this.getY());
         if (locked && (toolselected==0 || toolselected==1)) {
-            original.drawImage(lockimage,(int)MouseInfo.getPointerInfo().getLocation().getX()-this.getX(),(int)MouseInfo.getPointerInfo().getLocation().getY()-this.getY(),this);
+            Point mpoint = MouseInfo.getPointerInfo().getLocation();
+            double mx = mpoint.getX();
+            double my = mpoint.getY();
+            Point dpoint = this.getLocationOnScreen();
+            double fx = dpoint.getX();
+            double fy = dpoint.getY();
+            original.drawImage(lockimage,(int)mx-(int)fx,(int)my-(int)fy,this);
         }
         
         

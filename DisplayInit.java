@@ -60,8 +60,8 @@ public class DisplayInit {
         
         ArrayList<Force> forces = new ArrayList<Force>();
         
-        //Bridge bridge = new Bridge(30,new double[]{-400,-200,400,200},forces,null);
-        Bridge bridge = new Bridge();
+        Bridge bridge = new Bridge(100,new double[]{-800,-400,800,400},forces,new ArrayList<Node>());
+        //Bridge bridge = new Bridge();
         
         Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, WIDTH, HEIGHT, bridge);
         
