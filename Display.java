@@ -266,12 +266,28 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             y += height/2;
             double realx = x-xoffset;
             double realy = y-yoffset;
-            for(Node n : b.getNodes()) {
+            boolean found = false;
+            ArrayList<Node> bnodes = b.getNodes();
+            for(int i=bnodes.size()-1;i>-1;i--) {
+                Node n = bnodes.get(i);
                 double nx = n.getX();
                 double ny = n.getY();
                 if (distance(nx,ny,realx,realy) <= nodesize/2) {
-                    b.removeNode(n);
+                    b.removeNode(n,false);
+                    found=true;
                     break;
+                }
+            }
+            if (!found) {
+                ArrayList<Node> blocknodes = b.getNodesLocked();
+                for(int i=blocknodes.size()-1;i>-1;i--) {
+                    Node n = blocknodes.get(i);
+                    double nx = n.getX();
+                    double ny = n.getY();
+                    if (distance(nx,ny,realx,realy) <= nodesize/2) {
+                        b.removeNode(n,true);
+                        break;
+                    }
                 }
             }
         }
