@@ -5,7 +5,8 @@ import java.util.*;
 import javax.imageio.*;
 import java.io.*;
 import java.awt.image.*;
-public class Display extends JPanel implements ActionListener {
+import javax.swing.event.*;
+public class Display extends JPanel implements ActionListener,ChangeListener {
     JPanel superpanel;
     JButton nodebutton;
     JButton memberbutton;
@@ -13,6 +14,7 @@ public class Display extends JPanel implements ActionListener {
     JButton erasebutton;
     JButton homebutton;
     JButton clearbutton;
+    JSlider nodesizeslider;
     int height;
     int width;
     int toolselected; //0=nodebutton, 1=memberbutton, 2=force
@@ -25,7 +27,8 @@ public class Display extends JPanel implements ActionListener {
     boolean locked;
     BufferedImage lockimage;
     double[] zoomcords;
-    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, int width, int height, Bridge b){
+    int nodesize;
+    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
         this.nodebutton = nodebutton;
@@ -34,12 +37,14 @@ public class Display extends JPanel implements ActionListener {
         this.erasebutton = erasebutton;
         this.homebutton = homebutton;
         this.clearbutton = clearbutton;
+        this.nodesizeslider = nodesizeslider;
         nodebutton.addActionListener(this);
         memberbutton.addActionListener(this);
         forcebutton.addActionListener(this);
         erasebutton.addActionListener(this);
         homebutton.addActionListener(this);
         clearbutton.addActionListener(this);
+        nodesizeslider.addChangeListener(this);
         this.width = width;
         this.height = height;
         toolselected = 0;
@@ -55,6 +60,7 @@ public class Display extends JPanel implements ActionListener {
             System.out.println("Failed to load lock image");
             e.printStackTrace();
         }
+        superpanel.requestFocus();
     }
     public void draw(){
         width = this.getWidth();
@@ -62,7 +68,7 @@ public class Display extends JPanel implements ActionListener {
         this.repaint();
     }
     public void update() {
-        //System.out.println(zoomscale);
+        System.out.println(nodesize);
         double movement = 10.0/zoomscale;
         if (movement<1) {
             movement=1;
@@ -100,10 +106,10 @@ public class Display extends JPanel implements ActionListener {
         }
 
         g2d.setColor(new Color(100,100,100));
-        for(int r=0;r<(double)height;r+=20) {
+        for(int r=0;r<(double)2000;r+=20) {
             g2d.drawLine(0, (r)+(yoffset), width, (r)+(yoffset));
         }
-        for(int w=0;w<(double)width;w+=20) {
+        for(int w=0;w<(double)2000;w+=20) {
             g2d.drawLine((w)+(xoffset), 0, (w)+(xoffset), height);
         }
         
@@ -112,13 +118,13 @@ public class Display extends JPanel implements ActionListener {
             //System.out.println(n.getX()+","+n.getY());
             double xcord = (n.getX()+xoffset);
             double ycord = (n.getY()+yoffset);
-            g2d.fillOval((int)xcord-3, (int)ycord-3, 6, 6);
+            g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
         }
         g2d.setColor(Color.ORANGE);
         for(Node n : b.getNodesLocked()) {
             double xcord = (n.getX()+xoffset);
             double ycord = (n.getY()+yoffset);
-            g2d.fillOval((int)xcord-3, (int)ycord-3,6,6);
+            g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
             
         }
         for(ArrayList<Node> m : b.getMembers()) {
@@ -167,6 +173,14 @@ public class Display extends JPanel implements ActionListener {
         superpanel.requestFocus();
         draw();
     }
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider)e.getSource();
+        if (source==nodesizeslider) {
+            int tempval = source.getValue()/2;
+            nodesize = tempval*2;
+        }
+        superpanel.requestFocus();
+    }
     public void mouseClicked(double x, double y) {
         if (toolselected == 0) {
             //double realx = ((x+(width))/zoomscale)-xoffset;
@@ -195,6 +209,7 @@ public class Display extends JPanel implements ActionListener {
             Node newn = new Node(realx,realy,locked);
             b.addNode(newn,locked);
         }
+        superpanel.requestFocus();
     }
     public void scroll(int amount) {
         if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 1)) {

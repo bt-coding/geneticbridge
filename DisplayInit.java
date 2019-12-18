@@ -28,13 +28,34 @@ public class DisplayInit {
         controlpanel.add(erasebutton);
         controlpanel.add(homebutton);
         controlpanel.add(clearbutton);
-                
+        
+        controlpanel.setBackground(Color.GRAY);
+        
         panel.add(controlpanel, BorderLayout.NORTH);
         
         controlpanel.setFocusable(false);
         
         JPanel rightpanel = new JPanel();
+        rightpanel.setLayout(new BoxLayout(rightpanel, BoxLayout.Y_AXIS));
         
+        JSlider nodesize = new JSlider(JSlider.HORIZONTAL,2,22,6);
+        nodesize.setMajorTickSpacing(4);
+        nodesize.setMinorTickSpacing(2);
+        nodesize.setPaintTicks(true);
+        nodesize.setPaintLabels(true);
+        
+        JLabel nodesizetitle = new JLabel("Node Size");
+        nodesizetitle.setFont(new Font("TimesRoman", Font.PLAIN, 22));
+        
+        rightpanel.add(nodesizetitle);
+        rightpanel.add(nodesize);
+        
+        
+        rightpanel.setBackground(Color.GRAY);
+        
+        panel.add(rightpanel, BorderLayout.WEST);
+        
+    
         
         
         ArrayList<Force> forces = new ArrayList<Force>();
@@ -42,7 +63,7 @@ public class DisplayInit {
         //Bridge bridge = new Bridge(30,new double[]{-400,-200,400,200},forces,null);
         Bridge bridge = new Bridge();
         
-        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, WIDTH, HEIGHT, bridge);
+        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, WIDTH, HEIGHT, bridge);
         
         
         panel.add(display, BorderLayout.CENTER);
