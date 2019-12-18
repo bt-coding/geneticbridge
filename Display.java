@@ -151,7 +151,9 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             g2d.fillOval((int)x1-1, (int)y1-1, 2, 2);
             g2d.fillOval((int)x2-1, (int)y2-1, 2, 2);
         }
+        
         if (toolselected == 0) {
+            //node placement tool
             g2d.setColor(new Color(0,155,0));
             Point mpoint = MouseInfo.getPointerInfo().getLocation();
             double mx = mpoint.getX();
@@ -170,10 +172,33 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             double realx = x-xoffset;
             double realy = y-yoffset;
             g2d.drawOval((int)realx+xoffset-(int)(nodesize/2),(int)realy+yoffset-(int)(nodesize/2),nodesize,nodesize);
+        } else if (toolselected == 3) {
+            //erase tool
+            g2d.setColor(new Color(255,0,0,100));
+            Point mpoint = MouseInfo.getPointerInfo().getLocation();
+            double mx = mpoint.getX();
+            double my = mpoint.getY();
+            Point dpoint = this.getLocationOnScreen();
+            double fx = dpoint.getX();
+            double fy = dpoint.getY();
+            double x = ((int)mx-(int)fx);
+            double y = ((int)my-(int)fy);
+            x -= width/2;
+            y -= height/2;
+            x/=zoomscale;
+            y/=zoomscale;
+            x += width/2;
+            y += height/2;
+            double realx = x-xoffset;
+            double realy = y-yoffset;
+            g2d.fillOval((int)realx+xoffset-3,(int)realy+yoffset-3,6,6);
+            g2d.setColor(new Color(0,0,0,200));
+            g2d.drawOval((int)realx+xoffset-3,(int)realy+yoffset-3,6,6);
         }
         
         
         if (locked && (toolselected==0 || toolselected==1)) {
+            //display lock icon when placement locked
             Point mpoint = MouseInfo.getPointerInfo().getLocation();
             double mx = mpoint.getX();
             double my = mpoint.getY();
@@ -244,7 +269,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             for(Node n : b.getNodes()) {
                 double nx = n.getX();
                 double ny = n.getY();
-                if (distance(nx,ny,realx,realy) <= nodesize) {
+                if (distance(nx,ny,realx,realy) <= nodesize/2) {
                     b.removeNode(n);
                     break;
                 }
