@@ -115,21 +115,26 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             g2d.drawLine((w)+(xoffset), 0, (w)+(xoffset), height);
         }
         
-        g2d.setColor(Color.RED);
+        
         for(Node n : b.getNodes()) {
+            g2d.setColor(Color.RED);
             //System.out.println(n.getX()+","+n.getY());
             double xcord = (n.getX()+xoffset);
             double ycord = (n.getY()+yoffset);
             g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
+            g2d.setColor(Color.BLACK);
+            g2d.drawOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
         }
-        g2d.setColor(Color.ORANGE);
         for(Node n : b.getNodesLocked()) {
+            g2d.setColor(Color.ORANGE);
             double xcord = (n.getX()+xoffset);
             double ycord = (n.getY()+yoffset);
             g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
-            
+            g2d.setColor(Color.BLACK);
+            g2d.drawOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
         }
         for(ArrayList<Node> m : b.getMembers()) {
+            g2d.setColor(Color.BLACK);
             Node n1 = m.get(0);
             Node n2 = m.get(1);
             
@@ -139,19 +144,19 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             double y2 = (n2.getY()+yoffset);
             
             g2d.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
-            
+            g2d.fillOval((int)x1-1, (int)y1-1, 2, 2);
+            g2d.fillOval((int)x2-1, (int)y2-1, 2, 2);
         }
-        
-        g2d.setColor(new Color(0,155,0));
         if (toolselected == 0) {
+            g2d.setColor(new Color(0,155,0));
             Point mpoint = MouseInfo.getPointerInfo().getLocation();
             double mx = mpoint.getX();
             double my = mpoint.getY();
             Point dpoint = this.getLocationOnScreen();
             double fx = dpoint.getX();
             double fy = dpoint.getY();
-            double x = mx-fx;
-            double y = my-fy;
+            double x = ((int)mx-(int)fx);
+            double y = ((int)my-(int)fy);
             x -= width/2;
             y -= height/2;
             x/=zoomscale;
