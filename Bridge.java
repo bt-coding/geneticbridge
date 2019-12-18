@@ -124,4 +124,16 @@ public class Bridge implements Comparable {
     public void setMembers(ArrayList<ArrayList<Node>> m){
         members = m;
     }
+    public void removeNode(Node n) {
+        ArrayList<ArrayList<Node>> toremove = new ArrayList<ArrayList<Node>>();
+        for(ArrayList<Node> arn : members) {
+            if (arn.get(0) == n || arn.get(1) == n) {
+                toremove.add(arn);
+            }
+        }
+        for(ArrayList<Node> arn : toremove) {
+            members.remove(arn);
+        }
+        nodelist.remove(n);
+    }
 }

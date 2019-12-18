@@ -218,20 +218,6 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     }
     public void mouseClicked(double x, double y) {
         if (toolselected == 0) {
-            //double realx = ((x+(width))/zoomscale)-xoffset;
-            //double realy = ((y+(height))/zoomscale)-yoffset;
-            //double realx = x/zoomscale;
-            //double realy = y/zoomscale;
-            //double realx = x-xoffset/zoomscale;
-            //double realy = y-yoffset/zoomscale;
-            //double realx = (x)-xoffset/zoomscale;
-            //double realy = (y)-yoffset/zoomscale;
-            //double realx = x/zoomscale/2-xoffset;
-            //double realy = y/zoomscale/2-yoffset;
-            //double realx = ((x)-xoffset/2);
-            //double realy = ((y)-yoffset/2);
-            //x += xoffset;
-            //y += yoffset;
             x -= width/2;
             y -= height/2;
             x/=zoomscale;
@@ -240,11 +226,30 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             y += height/2;
             double realx = x-xoffset;
             double realy = y-yoffset;
-            
             Node newn = new Node(realx,realy,locked);
             b.addNode(newn,locked);
+        } else if (toolselected == 3) {
+            x -= width/2;
+            y -= height/2;
+            x/=zoomscale;
+            y/=zoomscale;
+            x += width/2;
+            y += height/2;
+            double realx = x-xoffset;
+            double realy = y-yoffset;
+            for(Node n : b.getNodes()) {
+                double nx = n.getX();
+                double ny = n.getY();
+                if (distance(nx,ny,realx,realy) <= nodesize) {
+                    b.removeNode(n);
+                    break;
+                }
+            }
         }
         superpanel.requestFocus();
+    }
+    private double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
     }
     public void scroll(int amount) {
         if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 1)) {
