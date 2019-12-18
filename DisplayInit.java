@@ -90,5 +90,6 @@ public class DisplayInit {
         
         FrameRateThread frt = new FrameRateThread(display,60);
         (new Thread(frt)).start();
+        panel.requestFocus();
     }
 }

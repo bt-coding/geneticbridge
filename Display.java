@@ -121,17 +121,21 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             //System.out.println(n.getX()+","+n.getY());
             double xcord = (n.getX()+xoffset);
             double ycord = (n.getY()+yoffset);
-            g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
-            g2d.setColor(Color.BLACK);
-            g2d.drawOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
+            if (xcord<width&&xcord>0&&ycord<height&&ycord>0) {
+                g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
+                g2d.setColor(Color.BLACK);
+                g2d.drawOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
+            }
         }
         for(Node n : b.getNodesLocked()) {
             g2d.setColor(Color.ORANGE);
             double xcord = (n.getX()+xoffset);
             double ycord = (n.getY()+yoffset);
-            g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
-            g2d.setColor(Color.BLACK);
-            g2d.drawOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
+            if (xcord<width&&xcord>0&&ycord<height&&ycord>0) {
+                g2d.fillOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
+                g2d.setColor(Color.BLACK);
+                g2d.drawOval((int)xcord-(nodesize/2), (int)ycord-(nodesize/2),nodesize,nodesize);
+            }
         }
         for(ArrayList<Node> m : b.getMembers()) {
             g2d.setColor(Color.BLACK);
