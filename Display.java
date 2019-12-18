@@ -24,6 +24,7 @@ public class Display extends JPanel implements ActionListener {
     Bridge b;
     boolean locked;
     BufferedImage lockimage;
+    double[] zoomcords;
     public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
@@ -46,6 +47,7 @@ public class Display extends JPanel implements ActionListener {
         xoffset = 0;
         yoffset = 0;
         dirmove = new int[4];
+        zoomcords = new double[2];
         this.b = b;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
@@ -60,25 +62,38 @@ public class Display extends JPanel implements ActionListener {
         this.repaint();
     }
     public void update() {
+        //System.out.println(zoomscale);
+        double movement = 10.0/zoomscale;
+        if (movement<1) {
+            movement=1;
+        }
         if (dirmove[0]==1) {
-            xoffset+=10;
+            xoffset+=movement;
         }
         if (dirmove[1]==1) {
-            yoffset+=10;
+            yoffset+=movement;
         }
         if (dirmove[2]==1) {
-            xoffset-=10;
+            xoffset-=movement;
         }
         if (dirmove[3]==1) {
-            yoffset-=10;
+            yoffset-=movement;
         }
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics original = g.create();
         Graphics2D g2d = (Graphics2D)(g);
-        g2d.scale(zoomscale,zoomscale);
         
+        g2d.translate((double)(width/2),(double)(height/2));
+        g2d.scale(zoomscale,zoomscale);
+        g2d.translate(-(double)(width/2),-(double)(height/2));
+        
+        /*
+        g2d.translate((double)zoomcords[0],(double)zoomcords[1]);
+        g2d.scale(zoomscale,zoomscale);
+        g2d.translate(-(double)zoomcords[0],-(double)zoomcords[1]);
+        */
         if (b==null) {
             System.out.println("Value of bridge is null");
             return;
@@ -144,8 +159,7 @@ public class Display extends JPanel implements ActionListener {
         } else if (src == erasebutton) {
             toolselected = 3;
         } else if (src == homebutton) {
-            xoffset=0;
-            yoffset=0;
+            this.goHome();
         } else if (src == clearbutton) {
             b = new Bridge();
         }
@@ -155,18 +169,42 @@ public class Display extends JPanel implements ActionListener {
     }
     public void mouseClicked(double x, double y) {
         if (toolselected == 0) {
-            double realx = (x/zoomscale)-xoffset;
-            double realy = (y/zoomscale)-yoffset;
+            //double realx = ((x+(width))/zoomscale)-xoffset;
+            //double realy = ((y+(height))/zoomscale)-yoffset;
+            //double realx = x/zoomscale;
+            //double realy = y/zoomscale;
+            //double realx = x-xoffset/zoomscale;
+            //double realy = y-yoffset/zoomscale;
+            //double realx = (x)-xoffset/zoomscale;
+            //double realy = (y)-yoffset/zoomscale;
+            //double realx = x/zoomscale/2-xoffset;
+            //double realy = y/zoomscale/2-yoffset;
+            //double realx = ((x)-xoffset/2);
+            //double realy = ((y)-yoffset/2);
+            //x += xoffset;
+            //y += yoffset;
+            x -= width/2;
+            y -= height/2;
+            x/=zoomscale;
+            y/=zoomscale;
+            x += width/2;
+            y += height/2;
+            double realx = x-xoffset;
+            double realy = y-yoffset;
+            
             Node newn = new Node(realx,realy,locked);
             b.addNode(newn,locked);
-            
         }
-        
-        
     }
     public void scroll(int amount) {
         if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 1)) {
             zoomscale+=amount*(Math.sqrt(zoomscale));
+            //Point mouseloc = MouseInfo.getPointerInfo().getLocation();
+            //zoomcords = new double[]{(mouseloc.getX()-8),(mouseloc.getY()-62)};
+            //System.out.println((mouseloc.getX()-8) + " " + (mouseloc.getY()-31));
+            //zoomscale+=amount;
+            //xoffset-=width/zoomscale;
+            //yoffset-=height/zoomscale;
         } else {
             zoomscale = 1;
         }
@@ -190,6 +228,7 @@ public class Display extends JPanel implements ActionListener {
     public void goHome() {
         xoffset = 0;
         yoffset = 0;
+        zoomscale=1;
     }
     public void lock() {
         locked = true;

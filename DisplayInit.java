@@ -33,6 +33,10 @@ public class DisplayInit {
         
         controlpanel.setFocusable(false);
         
+        JPanel rightpanel = new JPanel();
+        
+        
+        
         ArrayList<Force> forces = new ArrayList<Force>();
         
         //Bridge bridge = new Bridge(30,new double[]{-400,-200,400,200},forces,null);
