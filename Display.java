@@ -69,7 +69,6 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         this.repaint();
     }
     public void update() {
-        System.out.println(nodesize);
         double movement = 10.0/zoomscale;
         if (movement<1) {
             movement=1;
@@ -141,8 +140,25 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             
         }
         
+        g2d.setColor(Color.GREEN);
+        if (toolselected == 0) {
+            double x = (int)MouseInfo.getPointerInfo().getLocation().getX();
+            double y = (int)MouseInfo.getPointerInfo().getLocation().getY();
+            x -= width/2;
+            y -= height/2;
+            x/=zoomscale;
+            y/=zoomscale;
+            x += width/2;
+            y += height/2;
+            double realx = x;
+            double realy = y;
+            g2d.drawOval((int)realx-(int)(nodesize/2),(int)realy-(int)(nodesize/2),nodesize,nodesize);
+        }
+        
+        
+        System.out.println(this.getX() + " " + this.getY());
         if (locked && (toolselected==0 || toolselected==1)) {
-            original.drawImage(lockimage,(int)MouseInfo.getPointerInfo().getLocation().getX(),(int)MouseInfo.getPointerInfo().getLocation().getY()-120,this);
+            original.drawImage(lockimage,(int)MouseInfo.getPointerInfo().getLocation().getX()-this.getX(),(int)MouseInfo.getPointerInfo().getLocation().getY()-this.getY(),this);
         }
         
         
