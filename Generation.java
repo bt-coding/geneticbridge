@@ -1,6 +1,6 @@
 import java.util.*;
 public class Generation{
-    ArrayList<Bridge> gen = new ArrayList<Bridge>();
+    ArrayList<Bridge> gen;
     double genSize;
     int numBridgeNodes;
     double[] bridgeDimentions;
@@ -8,8 +8,9 @@ public class Generation{
     Bridge best;
     ArrayList<Node> lockednodes;
     double mutationRate;
+    double bestscore = -1*Integer.MAX_VALUE;
     public Generation(double gs,int nbn,double[] bd,ArrayList<Force> bf,ArrayList<Node> ln,double mr){
-        ArrayList<Bridge> gen = new ArrayList<Bridge>();
+        gen = new ArrayList<Bridge>();
         genSize = gs;
         numBridgeNodes = nbn;
         bridgeDimentions = bd;
@@ -18,24 +19,29 @@ public class Generation{
         for(int i = 0; i < genSize;i++){
             gen.add(new Bridge(numBridgeNodes,bridgeDimentions,bridgeForces,lockednodes));
         }
-        System.out.println(gen.size());
         best = gen.get(0);
         mutationRate = mr;
-        if (gen == null) {
+        /*if (gen == null) {
             System.out.println("THIRD NULL VALUE");
         }
         else{
             System.out.println("NOT A NULL VALUE IN CONSTRUCTOR");   
-        }
+        }*/
     }
     //test the bridge and sorts it based on score
     public void testGen(){
-        if (gen == null) { 
+        /*if (gen == null) { 
             System.out.println("NULL VALUE");
         } else {
             System.out.println("VALUE NOT NULL");
-        }
+        }*/
         Collections.sort(gen);
+        for(Bridge b : gen) {
+            if (b.getScore()>bestscore) {
+                best=b;
+                //System.out.println("new best");
+            }
+        }
     }
     public void createNewGen(){
         //The percent of new bridges in each generation
@@ -57,9 +63,9 @@ public class Generation{
         while(newGen.size() < gen.size()){
             newGen.add(crossSameNodeBridges(gen.get((int)(gen.size()*(Math.random()/(1.0/percentCrossRange)))),gen.get((int)(gen.size()*(Math.random()/(1.0/percentCrossRange))))));
         }
-        System.out.println("before: " + gen.size());
+        //System.out.println("before: " + gen.size());
         gen = newGen;
-        System.out.println("after: " + gen.size());
+        //System.out.println("after: " + gen.size());
     }
     public int[][] convertMemberArrayToIntArray(Bridge b){
         int[][] memberList = new int[b.members.size()][2];
@@ -127,5 +133,8 @@ public class Generation{
         }
         newBridge.nodelist = newPoints;
         return newBridge;
+    }
+    public Bridge getBest() {
+        return best;
     }
 }

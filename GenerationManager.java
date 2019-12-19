@@ -11,7 +11,9 @@ public class GenerationManager implements Runnable{
     int maxNodes;
     int minNumNodes;
     boolean running;
-    public GenerationManager(int ng, int nbpg,double mr,double[] bd,ArrayList<Node> ln,ArrayList<Force> bf, int mn, int mnn){
+    Bridge best;
+    Display display;
+    public GenerationManager(int ng, int nbpg,double mr,double[] bd,ArrayList<Node> ln,ArrayList<Force> bf, int mn, int mnn, Display d){
         bestBridges = new ArrayList<Bridge>();
         numGens = ng;
         numBridgesPerGen = nbpg;
@@ -21,11 +23,16 @@ public class GenerationManager implements Runnable{
         bridgeForces = bf;
         maxNodes = mn;
         minNumNodes = mnn; 
-        running = false;
+        running = true;
+        this.display = d;
+    }
+    public boolean isRunning() {
+        return running;
     }
     public void run(){
         running = true;
         for(int nn = minNumNodes; nn < maxNodes; nn++){
+            System.out.println(nn);
             Generation generation = new Generation(numBridgesPerGen,nn,bridgeDimensions,bridgeForces,lockedNodes,mutationRate);
             if (generation.gen == null) {
                 System.out.println("ANOTHER NULL");
@@ -33,12 +40,25 @@ public class GenerationManager implements Runnable{
             for(int i = 0; i < numGens; i++){
                 generation.testGen();
                 generation.createNewGen();
+                //System.out.println(i);
             }
-            bestBridges.add(generation.best);
+            best = generation.getBest();
+            display.drawBridge(best);
+            if (best == null) {
+                System.out.println("NULL");
+            }
+            bestBridges.add(best);
         }
         running = false;
     }
-    public  Bridge getCurrentBridge(){
-        return bestBridges.get(bestBridges.size()-1);
+    public Bridge getCurrentBridge(){
+        if (bestBridges.size()>0) {
+            return bestBridges.get(bestBridges.size()-1);
+        } else {
+            return null;
+        }
+    }
+    public Bridge getBest() {
+        return best;
     }
 }
