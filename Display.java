@@ -245,9 +245,9 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
                 simulating = true;
                 ArrayList<Node> tempLocked = new ArrayList<Node>();
                 for(Node n : b.getNodesLocked()) {
-                    tempLocked.add(new Node(n.getX(),n.getY(),n.getLocked()));
+                    tempLocked.add(new Node(n.getX()+2000,n.getY()+2000,n.getLocked()));
                 }
-                GenerationManager gm = new GenerationManager(1000,10,.05,new double[]{1000,1000,1500,1500},tempLocked,b.forces,100,2,this);
+                GenerationManager gm = new GenerationManager(1000,10,.05,new double[]{1000,1000,1100,1100},tempLocked,b.forces,100,2,this);
                 (new Thread(gm)).start();
                 System.out.println("finished");
                 simulating=false;

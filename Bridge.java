@@ -114,9 +114,9 @@ public class Bridge implements Comparable {
     public int compareTo(Object other) {
         Bridge b2 = (Bridge)other;
         if (b2.getScore()>this.getScore()) {
-            return -1;
-        } else if (b2.getScore()<this.getScore()) {
             return 1;
+        } else if (b2.getScore()<this.getScore()) {
+            return -1;
         }
         return 0;
     }
