@@ -1,5 +1,5 @@
 import java.util.*;
-public class GenerationManager{
+public class GenerationManager implements Runnable{
     ArrayList<Bridge> bestBridges;
     int numGens;
     int numBridgesPerGen;
@@ -21,7 +21,7 @@ public class GenerationManager{
         maxNodes = mn;
         minNumNodes = mnn;
     }
-    public void runGens(){
+    public void run(){
         for(int nn = minNumNodes; nn < maxNodes; nn++){
             Generation gen = new Generation(numBridgesPerGen,nn,bridgeDimensions,bridgeForces,lockedNodes,mutationRate);
             for(int i = 0; i < numGens; i++){
