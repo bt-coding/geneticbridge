@@ -242,8 +242,12 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             b = new Bridge();
         } else if (src == simulatebutton) {
             if (!simulating) {
-                simulating = true; 
-                GenerationManager gm = new GenerationManager(100,100,.05,new double[]{0,0,width,height},b.getNodesLocked(),b.forces,100,2);
+                simulating = true;
+                ArrayList<Node> tempLocked = new ArrayList<Node>();
+                for(Node n : b.getNodesLocked()) {
+                    tempLocked.add(new Node(n.getX(),n.getY(),n.getLocked()));
+                }
+                GenerationManager gm = new GenerationManager(100,100,.05,new double[]{0,0,width,height},tempLocked,b.forces,100,2);
                 (new Thread(gm)).start();
                 while(gm.running) {
                     if (gm.getCurrentBridge() != null) {
