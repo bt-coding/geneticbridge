@@ -28,4 +28,25 @@ public class TestBridge{
         }
         return false;
     }
+    public static double getScore(Bridge b){
+        double x2 = 0;
+        double x1 = 0;
+        double y2 = 0;
+        double y1 = 0;
+        for(Node n: b.nodelist){
+            if(n.x > x2){
+                x2 = n.x;
+            }
+            if(n.x< x1){
+                x1 = n.x;
+            }
+            if(n.y > y2){
+                y2 = n.y;
+            }
+            if(n.y < y1){
+                y1 = n.y;
+            }
+        }
+        return (x2-x1)*(y2-y1);
+    }   
 }
