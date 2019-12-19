@@ -10,6 +10,7 @@ public class GenerationManager implements Runnable{
     int genSize;
     int maxNodes;
     int minNumNodes;
+    boolean running;
     public GenerationManager(int ng, int nbpg,double mr,double[] bd,ArrayList<Node> ln,ArrayList<Force> bf, int mn, int mnn){
         bestBridges = new ArrayList<Bridge>();
         numGens = ng;
@@ -20,8 +21,10 @@ public class GenerationManager implements Runnable{
         bridgeForces = bf;
         maxNodes = mn;
         minNumNodes = mnn;
+        running = false;
     }
     public void run(){
+        running = true;
         for(int nn = minNumNodes; nn < maxNodes; nn++){
             Generation gen = new Generation(numBridgesPerGen,nn,bridgeDimensions,bridgeForces,lockedNodes,mutationRate);
             for(int i = 0; i < numGens; i++){
@@ -30,6 +33,7 @@ public class GenerationManager implements Runnable{
             }
             bestBridges.add(gen.best);
         }
+        running = false;
     }
     public  Bridge getCurrentBridge(){
         return bestBridges.get(bestBridges.size()-1);
