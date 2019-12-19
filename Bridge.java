@@ -36,7 +36,8 @@ public class Bridge implements Comparable {
             nodelist.add(n);
         }
         //M = 2J - R for static determinant
-        int membercount = (2*nodes)-forces.size();
+        //int membercount = (2*nodes)-forces.size();
+        int membercount = 2*nodes;
         for(int i=0;i<membercount;i++) {
             Node n1 = nodelist.get((int)(Math.random()*(double)nodelist.size()));
             Node n2 = nodelist.get((int)(Math.random()*(double)nodelist.size()));
@@ -98,7 +99,8 @@ public class Bridge implements Comparable {
         if (score != -1) {
             return score;
         }
-        return 0;
+        score = TestBridge.getScore(this);
+        return score;
     }
     public ArrayList<Node> getNodes() {
         return nodelist;

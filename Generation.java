@@ -9,6 +9,7 @@ public class Generation{
     ArrayList<Node> lockednodes;
     double mutationRate;
     public Generation(double gs,int nbn,double[] bd,ArrayList<Force> bf,ArrayList<Node> ln,double mr){
+        ArrayList<Bridge> gen = new ArrayList<Bridge>();
         genSize = gs;
         numBridgeNodes = nbn;
         bridgeDimentions = bd;
@@ -17,11 +18,21 @@ public class Generation{
         for(int i = 0; i < genSize;i++){
             gen.add(new Bridge(numBridgeNodes,bridgeDimentions,bridgeForces,lockednodes));
         }
+        System.out.println(gen.size());
         best = gen.get(0);
         mutationRate = mr;
+        if (gen == null) {
+            System.out.println("THIRD NULL VALUE");
+        }
     }
     //test the bridge and sorts it based on score
     public void testGen(){
+        if (gen == null) { 
+            System.out.println("NULL VALUE");
+        } else {
+            System.out.println("VALUE NOT NULL");
+        }
+        System.out.println(gen.size());
         Collections.sort(gen);
     }
     public void createNewGen(){
@@ -44,6 +55,9 @@ public class Generation{
         while(newGen.size() < gen.size()){
             newGen.add(crossSameNodeBridges(gen.get((int)(gen.size()*(Math.random()/(1.0/percentCrossRange)))),gen.get((int)(gen.size()*(Math.random()/(1.0/percentCrossRange))))));
         }
+        System.out.println("before: " + gen.size());
+        gen = newGen;
+        System.out.println("after: " + gen.size());
     }
     public int[][] convertMemberArrayToIntArray(Bridge b){
         int[][] memberList = new int[b.members.size()][2];

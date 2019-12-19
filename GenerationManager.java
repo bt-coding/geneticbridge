@@ -27,6 +27,9 @@ public class GenerationManager implements Runnable{
         running = true;
         for(int nn = minNumNodes; nn < maxNodes; nn++){
             Generation gen = new Generation(numBridgesPerGen,nn,bridgeDimensions,bridgeForces,lockedNodes,mutationRate);
+            if (gen.gen == null) {
+                System.out.println("ANOTHER NULL");
+            }
             for(int i = 0; i < numGens; i++){
                 gen.testGen();
                 gen.createNewGen();

@@ -27,6 +27,7 @@ public class DisplayInit {
         JButton erasebutton = new JButton("erase");
         JButton homebutton = new JButton("home");
         JButton clearbutton = new JButton("clear");
+        JButton simulatebutton = new JButton("simulate");
         
         JPanel panel = new JPanel(new BorderLayout());
         
@@ -38,6 +39,7 @@ public class DisplayInit {
         controlpanel.add(erasebutton);
         controlpanel.add(homebutton);
         controlpanel.add(clearbutton);
+        controlpanel.add(simulatebutton);
         
         controlpanel.setBackground(Color.GRAY);
         
@@ -88,7 +90,7 @@ public class DisplayInit {
         Bridge bridge = new Bridge(100,new double[]{-800,-400,800,400},forces,new ArrayList<Node>());
         //Bridge bridge = new Bridge();
         
-        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, movespeed, WIDTH, HEIGHT, bridge);
+        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, movespeed, simulatebutton, WIDTH, HEIGHT, bridge);
         
         
         panel.add(display, BorderLayout.CENTER);

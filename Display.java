@@ -14,6 +14,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     JButton erasebutton;
     JButton homebutton;
     JButton clearbutton;
+    JButton simulatebutton;
     JSlider nodesizeslider;
     JSlider movespeedslider;
     int height;
@@ -31,7 +32,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     double[] zoomcords;
     int nodesize;
     double movespeed;
-    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, JSlider movespeedslider, int width, int height, Bridge b){
+    boolean simulating;
+    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, JSlider movespeedslider, JButton simulatebutton, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
         this.nodebutton = nodebutton;
@@ -42,6 +44,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         this.clearbutton = clearbutton;
         this.nodesizeslider = nodesizeslider;
         this.movespeedslider = movespeedslider;
+        this.simulatebutton = simulatebutton;
         nodebutton.addActionListener(this);
         memberbutton.addActionListener(this);
         forcebutton.addActionListener(this);
@@ -50,6 +53,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         clearbutton.addActionListener(this);
         nodesizeslider.addChangeListener(this);
         movespeedslider.addChangeListener(this);
+        simulatebutton.addActionListener(this);
         this.width = width;
         this.height = height;
         toolselected = 0;
@@ -62,6 +66,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         movespeed=10;
         this.b = b;
         snap = false;
+        simulating = false;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
         } catch (Exception e) {
@@ -235,8 +240,19 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             this.goHome();
         } else if (src == clearbutton) {
             b = new Bridge();
+        } else if (src == simulatebutton) {
+            if (!simulating) {
+                simulating = true; 
+                GenerationManager gm = new GenerationManager(100,100,.05,new double[]{0,0,width,height},b.getNodesLocked(),b.forces,100,2);
+                (new Thread(gm)).start();
+                while(gm.running) {
+                    if (gm.getCurrentBridge() != null) {
+                        b = gm.getCurrentBridge();
+                    }
+                }
+                simulating=false;
+            }
         }
-        
         superpanel.requestFocus();
         draw();
     }
