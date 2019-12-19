@@ -47,7 +47,7 @@ public class TestBridge{
                 y1 = n.y;
             }
         }
-        return (x2-x1)*(y2-y1);
+        return 1/((x2-x1)*(y2-y1));
         //return b.getNodes().size();
     }   
 }
