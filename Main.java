@@ -6,7 +6,7 @@ public class Main{
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         frame.setUndecorated(false);
         
-        int frameRate = 32;
+        int frameRate = 32;        
         //Display screen = new Display();
         
         //frame.add(screen);
