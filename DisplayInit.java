@@ -1,7 +1,7 @@
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
-import com.seaglasslookandfeel.*;
+//import com.seaglasslookandfeel.*;
 public class DisplayInit {
     public static void main(String[] args) {
         int WIDTH = 1920;

@@ -1,6 +1,6 @@
 import java.util.*;
 public class Generation{
-    ArrayList<Bridge> gen;
+    ArrayList<Bridge> gen = new ArrayList<Bridge>();
     double genSize;
     int numBridgeNodes;
     double[] bridgeDimentions;
