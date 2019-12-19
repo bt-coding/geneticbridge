@@ -24,6 +24,9 @@ public class Generation{
         if (gen == null) {
             System.out.println("THIRD NULL VALUE");
         }
+        else{
+            System.out.println("NOT A NULL VALUE IN CONSTRUCTOR");   
+        }
     }
     //test the bridge and sorts it based on score
     public void testGen(){
@@ -32,7 +35,6 @@ public class Generation{
         } else {
             System.out.println("VALUE NOT NULL");
         }
-        System.out.println(gen.size());
         Collections.sort(gen);
     }
     public void createNewGen(){

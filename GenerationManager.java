@@ -20,21 +20,21 @@ public class GenerationManager implements Runnable{
         lockedNodes = ln;
         bridgeForces = bf;
         maxNodes = mn;
-        minNumNodes = mnn;
+        minNumNodes = mnn; 
         running = false;
     }
     public void run(){
         running = true;
         for(int nn = minNumNodes; nn < maxNodes; nn++){
-            Generation gen = new Generation(numBridgesPerGen,nn,bridgeDimensions,bridgeForces,lockedNodes,mutationRate);
-            if (gen.gen == null) {
+            Generation generation = new Generation(numBridgesPerGen,nn,bridgeDimensions,bridgeForces,lockedNodes,mutationRate);
+            if (generation.gen == null) {
                 System.out.println("ANOTHER NULL");
             }
             for(int i = 0; i < numGens; i++){
-                gen.testGen();
-                gen.createNewGen();
+                generation.testGen();
+                generation.createNewGen();
             }
-            bestBridges.add(gen.best);
+            bestBridges.add(generation.best);
         }
         running = false;
     }
