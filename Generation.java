@@ -132,7 +132,17 @@ public class Generation{
             }
         }
         newBridge.nodelist = newPoints;
+        newBridge.members = newMembers;
         return newBridge;
+    }
+    public boolean properMems(Bridge b){
+        for(ArrayList<Node> member: b.members){
+            if(!b.nodelist.contains(member.get(0)))
+                return false;
+            else if(!b.nodelist.contains(member.get(1)))
+                return false;
+        }
+        return true;
     }
     public Bridge getBest() {
         return best;
