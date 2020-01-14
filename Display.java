@@ -33,6 +33,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     int nodesize;
     double movespeed;
     boolean simulating;
+    boolean memberconnected;
+    Node firstnode;
     public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, JSlider movespeedslider, JButton simulatebutton, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
@@ -67,6 +69,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         this.b = b;
         snap = false;
         simulating = false;
+        memberconnected = false;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
         } catch (Exception e) {
@@ -205,6 +208,22 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             g2d.drawOval((int)realx+xoffset-3,(int)realy+yoffset-3,6,6);
         }
         
+        if (memberconnected) {
+            double xcord = (firstnode.getX()+xoffset);
+            double ycord = (firstnode.getY()+yoffset);
+            Point mpoint = MouseInfo.getPointerInfo().getLocation();
+            double mx = mpoint.getX();
+            double my = mpoint.getY();
+            Point dpoint = this.getLocationOnScreen();
+            double fx = dpoint.getX();
+            double fy = dpoint.getY();
+            double x = ((int)mx-(int)fx);
+            double y = ((int)my-(int)fy);
+            
+            //g.drawLine((int)xcord-(nodesize/2), (int)ycord-(nodesize/2), (int)x, (int)y);
+            g.drawLine((int)xcord,(int)ycord,(int)x,(int)y);
+        }
+        
         
         if (locked && (toolselected==0 || toolselected==1)) {
             //display lock icon when placement locked
@@ -228,6 +247,9 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     }
     public void actionPerformed(ActionEvent evt) {
         Object src = evt.getSource();
+        if (src != memberbutton) {
+            memberconnected = false;
+        }
         if (src == nodebutton) {
             toolselected = 0;
         } else if (src == memberbutton) {
@@ -267,6 +289,9 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         superpanel.requestFocus();
     }
     public void mouseClicked(double x, double y) {
+        if (toolselected != 1) {
+            memberconnected = false;
+        }
         if (toolselected == 0) {
             x -= width/2;
             y -= height/2;
@@ -278,6 +303,80 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             double realy = y-yoffset;
             Node newn = new Node(realx,realy,locked);
             b.addNode(newn,locked);
+        } else if (toolselected == 1) {
+            if (!memberconnected) {
+                x-= width/2;
+                y -= height/2;
+                x/=zoomscale;
+                y/=zoomscale;
+                x += width/2;
+                y += height/2;
+                double realx = x-xoffset;
+                double realy = y-yoffset;
+                boolean found = false;
+                ArrayList<Node> bnodes = b.getNodes();
+                for(int i=bnodes.size()-1;i>-1;i--) {
+                    Node n = bnodes.get(i);
+                    double nx = n.getX();
+                    double ny = n.getY();
+                    if (distance(nx,ny,realx,realy) <= nodesize/2) {
+                        memberconnected = true;
+                        firstnode=n;
+                        found=true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    ArrayList<Node> blocknodes = b.getNodesLocked();
+                    for(int i=blocknodes.size()-1;i>-1;i--) {
+                        Node n = blocknodes.get(i);
+                        double nx = n.getX();
+                        double ny = n.getY();
+                        if (distance(nx,ny,realx,realy) <= nodesize/2) {
+                            memberconnected = true;
+                            firstnode = n;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                x-= width/2;
+                y -= height/2;
+                x/=zoomscale;
+                y/=zoomscale;
+                x += width/2;
+                y += height/2;
+                double realx = x-xoffset;
+                double realy = y-yoffset;
+                boolean found = false;
+                ArrayList<Node> bnodes = b.getNodes();
+                for(int i=bnodes.size()-1;i>-1;i--) {
+                    Node n = bnodes.get(i);
+                    double nx = n.getX();
+                    double ny = n.getY();
+                    if (distance(nx,ny,realx,realy) <= nodesize/2) {
+                        memberconnected = false;
+                        firstnode=null;
+                        b.addMember(firstnode, n, true, locked);
+                        found=true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    ArrayList<Node> blocknodes = b.getNodesLocked();
+                    for(int i=blocknodes.size()-1;i>-1;i--) {
+                        Node n = blocknodes.get(i);
+                        double nx = n.getX();
+                        double ny = n.getY();
+                        if (distance(nx,ny,realx,realy) <= nodesize/2) {
+                            memberconnected = false;
+                            firstnode = null;
+                            b.addMember(firstnode, n, true, locked);
+                            break;
+                        }
+                    }
+                }
+            }
         } else if (toolselected == 3) {
             x -= width/2;
             y -= height/2;
@@ -356,5 +455,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     }
     public void unlock() {
         locked = false;
+    }
+    public void escape() {
+        memberconnected = false;
     }
 }

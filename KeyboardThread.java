@@ -24,6 +24,8 @@ public class KeyboardThread extends KeyAdapter {
             display.goHome();
         } else if (key == KeyEvent.VK_SHIFT) {
             display.lock();
+        } else if (key == KeyEvent.VK_ESCAPE) {
+            display.escape();
         }
     }
     public void keyReleased(KeyEvent e) {
