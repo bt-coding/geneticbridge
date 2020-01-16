@@ -204,7 +204,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             double realx = x-xoffset;
             double realy = y-yoffset;
             g2d.fillOval((int)realx+xoffset-3,(int)realy+yoffset-3,6,6);
-            g2d.setColor(new Color(0,0,0,200));
+            g2d.setColor(new Color(0,0,0,200)); 
             g2d.drawOval((int)realx+xoffset-3,(int)realy+yoffset-3,6,6);
         }
         
@@ -219,6 +219,12 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             double fy = dpoint.getY();
             double x = ((int)mx-(int)fx);
             double y = ((int)my-(int)fy);
+            x-= width/2;
+            y-= height/2;
+            x/=zoomscale;
+            y/=zoomscale;
+            x += width/2;
+            y += height/2;
             
             //g.drawLine((int)xcord-(nodesize/2), (int)ycord-(nodesize/2), (int)x, (int)y);
             g.drawLine((int)xcord,(int)ycord,(int)x,(int)y);
@@ -356,8 +362,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
                     double ny = n.getY();
                     if (distance(nx,ny,realx,realy) <= nodesize/2) {
                         memberconnected = false;
-                        firstnode=null;
                         b.addMember(firstnode, n, true, locked);
+                        firstnode=null;
                         found=true;
                         break;
                     }
@@ -419,12 +425,6 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     public void scroll(int amount) {
         if (!(zoomscale+(amount*(Math.sqrt(zoomscale))) <= 1)) {
             zoomscale+=amount*(Math.sqrt(zoomscale));
-            //Point mouseloc = MouseInfo.getPointerInfo().getLocation();
-            //zoomcords = new double[]{(mouseloc.getX()-8),(mouseloc.getY()-62)};
-            //System.out.println((mouseloc.getX()-8) + " " + (mouseloc.getY()-31));
-            //zoomscale+=amount;
-            //xoffset-=width/zoomscale;
-            //yoffset-=height/zoomscale;
         } else {
             zoomscale = 1;
         }
