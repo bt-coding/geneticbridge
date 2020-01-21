@@ -12,13 +12,19 @@ public class TestBridge{
         double force = 0.5;
         while(!broken(members,maxTen,maxCom)){
             for(Node n: forces){
-                applyForce(force,n);
+                applyForceToMem(force,n,members);
             }
             force += 0.5;
         }
         return members;
     }
-    public static void applyForce(double force, Node node){
+    public static void applyForceToMem(double force, Node node,ArrayList<Member> members){
+        ArrayList<Member> connected = new ArrayList<Member>();
+        for(Member mem: members){
+            if(mem.getNodeOne() == node || mem.getNodeTwo() == node){
+                connected.add(mem);
+            }
+        }
         
     }
     public static boolean broken(ArrayList<Member> mems, double maxT, double maxC){
