@@ -11,6 +11,7 @@ public class Bridge implements Comparable {
         nodelist = new ArrayList<Node>();
         lockednodes = new ArrayList<Node>();
         members = new ArrayList<ArrayList<Node>>();
+        lockedmembers = new ArrayList<ArrayList<Node>>();
         this.forces = forces;
         score = -1;
     }
@@ -18,6 +19,7 @@ public class Bridge implements Comparable {
         nodelist = new ArrayList<Node>();
         lockednodes = new ArrayList<Node>();
         members = new ArrayList<ArrayList<Node>>();
+        lockedmembers = new ArrayList<ArrayList<Node>>();
         forces = new ArrayList<Force>();
         score = -1;
     }
@@ -27,6 +29,7 @@ public class Bridge implements Comparable {
         
         this.lockednodes = lockednodes;
         members = new ArrayList<ArrayList<Node>>();
+        lockedmembers = new ArrayList<ArrayList<Node>>();
         this.forces = forces;
         score = -1;
         for(int i=0;i<nodes;i++) {
@@ -75,20 +78,35 @@ public class Bridge implements Comparable {
     public void addMember(Node n1, Node n2, boolean externalnodes, boolean locked) {
         //set externalnodes to true if the argument nodes are not direct references to the existing nodelist
         if (externalnodes) {
-            for(Node node : nodelist) {
-                double nodex = node.getX();
-                double nodey = node.getY();
-                if (nodex==n1.getX() && nodey==n1.getY()) {
-                    n1 = node;
+            if (locked) {
+                for(Node node : lockednodes) {
+                    double nodex = node.getX();
+                    double nodey = node.getY();
+                    if (nodex==n1.getX() && nodey==n1.getY()) {
+                        n1 = node;
+                    }
+                    if (nodex==n2.getX() && nodey==n2.getY()) {
+                        n2 = node;
+                    }
                 }
-                if (nodex==n2.getX() && nodey==n2.getY()) {
-                    n2 = node;
+            } else {
+                for(Node node : nodelist) {
+                    double nodex = node.getX();
+                    double nodey = node.getY();
+                    if (nodex==n1.getX() && nodey==n1.getY()) {
+                        n1 = node;
+                    }
+                    if (nodex==n2.getX() && nodey==n2.getY()) {
+                        n2 = node;
+                    }
                 }
             }
         }
         ArrayList<Node> temp = new ArrayList<Node>();
         temp.add(n1);
         temp.add(n2);
+        System.out.println("Node 1: " + n1.toString());
+        System.out.println("Node 2: " + n2.toString());
         if(locked) {
             lockedmembers.add(temp);
         } else {
@@ -110,6 +128,9 @@ public class Bridge implements Comparable {
     }
     public ArrayList<ArrayList<Node>> getMembers() {
         return members;
+    }
+    public ArrayList<ArrayList<Node>> getMembersLocked() {
+        return lockedmembers;
     }
     public int compareTo(Object other) {
         Bridge b2 = (Bridge)other;

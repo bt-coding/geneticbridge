@@ -39,4 +39,11 @@ public class Node {
         this.x = d[0];
         this.y = d[1];
     }
+    public String toString() {
+        String lockstring = "unlocked";
+        if (locked) {
+            lockstring = "locked";
+        }
+        return "(" + x + "," + y + ") " +lockstring;
+    }
 }
