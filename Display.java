@@ -163,6 +163,20 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             g2d.fillOval((int)x1-1, (int)y1-1, 2, 2);
             g2d.fillOval((int)x2-1, (int)y2-1, 2, 2);
         }
+        for(ArrayList<Node> m : b.getMembersLocked()) {
+            g2d.setColor(Color.GREEN);
+            Node n1 = m.get(0);
+            Node n2 = m.get(1);
+            
+            double x1 = (n1.getX()+xoffset);
+            double y1 = (n1.getY()+yoffset);
+            double x2 = (n2.getX()+xoffset);
+            double y2 = (n2.getY()+yoffset);
+            
+            g2d.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
+            g2d.fillOval((int)x1-1, (int)y1-1, 2, 2);
+            g2d.fillOval((int)x2-1, (int)y2-1, 2, 2);
+        }
         
         if (toolselected == 0) {
             //node placement tool
@@ -227,6 +241,11 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             y += height/2;
             
             //g.drawLine((int)xcord-(nodesize/2), (int)ycord-(nodesize/2), (int)x, (int)y);
+            if (locked) {
+                g.setColor(Color.GREEN);
+            } else {
+                g.setColor(Color.BLACK);
+            }
             g.drawLine((int)xcord,(int)ycord,(int)x,(int)y);
         }
         
@@ -341,6 +360,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
                         if (distance(nx,ny,realx,realy) <= nodesize/2) {
                             memberconnected = true;
                             firstnode = n;
+                            found=true;
                             break;
                         }
                     }
@@ -378,6 +398,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
                             memberconnected = false;
                             firstnode = null;
                             b.addMember(firstnode, n, true, locked);
+                            found=true;
                             break;
                         }
                     }
