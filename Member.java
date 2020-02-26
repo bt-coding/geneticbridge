@@ -1,6 +1,10 @@
 public class Member {
     private Node n1;
     private Node n2;
+    private double leftLoadHPercent;
+    private double LeftLoadVPercent;
+    private double rightLoadHPercent;
+    private double rightLoadVPercent;
     //angle to horizon in radians
     double angle;
     double forceApplied;

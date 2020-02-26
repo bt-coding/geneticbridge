@@ -9,6 +9,9 @@ public class TestBridge{
         for(Member mem: members){
             mem.angle = Math.atan((mem.getNodeOne().y-mem.getNodeTwo().y)/(mem.getNodeTwo().x-mem.getNodeOne().x));
         }
+        for(Member mem: members){
+            
+        }
         double force = 0.5;
         while(!broken(members,maxTen,maxCom)){
             for(Node n: forces){
@@ -26,6 +29,20 @@ public class TestBridge{
             }
         }
         
+    }   
+    public static double getPercentLoadHorzontally(ArrayList<Member> mems,Node n,Member m){
+        double sum = 0;
+        for(Member mem: mems){
+            sum += Math.abs(Math.cos(mem.angle));
+        }
+        return Math.abs(Math.cos(m.angle))/sum;
+    }
+    public static double getPercentLoadVertically(ArrayList<Member> mems,Node n,Member m){
+        double sum = 0;
+        for(Member mem: mems){
+            sum += Math.abs(Math.sin(mem.angle));
+        }
+        return Math.abs(Math.sin(m.angle))/sum;
     }
     public static boolean broken(ArrayList<Member> mems, double maxT, double maxC){
         for(Member mem: mems){
