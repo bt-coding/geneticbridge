@@ -9,9 +9,6 @@ public class TestBridge{
         for(Member mem: members){
             mem.angle = Math.atan((mem.getNodeOne().y-mem.getNodeTwo().y)/(mem.getNodeTwo().x-mem.getNodeOne().x));
         }
-        for(Member mem: members){
-            
-        }
         double force = 0.5;
         while(!broken(members,maxTen,maxCom)){
             for(Node n: forces){
