@@ -6,7 +6,7 @@ import javax.imageio.*;
 import java.io.*;
 import java.awt.image.*;
 import javax.swing.event.*;
-public class Display extends JPanel implements ActionListener,ChangeListener {
+public class Display extends JPanel implements ActionListener,ChangeListener,ItemListener {
     JPanel superpanel;
     JButton nodebutton;
     JButton memberbutton;
@@ -17,6 +17,8 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     JButton simulatebutton;
     JSlider nodesizeslider;
     JSlider movespeedslider;
+    JSlider snapsizeslider;
+    JCheckBox snapgridbox;
     int height;
     int width;
     int toolselected; //0=nodebutton, 1=memberbutton, 2=force
@@ -36,7 +38,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     boolean memberconnected;
     int snapScale;
     Node firstnode;
-    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, JSlider movespeedslider, JButton simulatebutton, int width, int height, Bridge b){
+    public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, JSlider movespeedslider, JSlider snapsizeslider, JButton simulatebutton, JCheckBox snapgridbox, int width, int height, Bridge b){
         super();
         this.superpanel = superpannel;
         this.nodebutton = nodebutton;
@@ -47,7 +49,9 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         this.clearbutton = clearbutton;
         this.nodesizeslider = nodesizeslider;
         this.movespeedslider = movespeedslider;
+        this.snapsizeslider = snapsizeslider;
         this.simulatebutton = simulatebutton;
+        this.snapgridbox = snapgridbox;
         nodebutton.addActionListener(this);
         memberbutton.addActionListener(this);
         forcebutton.addActionListener(this);
@@ -56,7 +60,9 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         clearbutton.addActionListener(this);
         nodesizeslider.addChangeListener(this);
         movespeedslider.addChangeListener(this);
+        snapsizeslider.addChangeListener(this);
         simulatebutton.addActionListener(this);
+        snapgridbox.addItemListener(this);
         this.width = width;
         this.height = height;
         toolselected = 0;
@@ -68,10 +74,10 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         nodesize=6;
         movespeed=10;
         this.b = b;
-        snap = true;
+        snap = false;
         simulating = false;
         memberconnected = false;
-        snapScale = 20;
+        snapScale = 5;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
         } catch (Exception e) {
@@ -122,10 +128,16 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         }
 
         g2d.setColor(new Color(100,100,100));
-        for(int r=0;r<(double)2000;r+=20) {
+        /*for(int r=0;r<(double)2000;r+=20) {
             g2d.drawLine(0, (r)+(yoffset), width, (r)+(yoffset));
         }
         for(int w=0;w<(double)2000;w+=20) {
+            g2d.drawLine((w)+(xoffset), 0, (w)+(xoffset), height);
+        }*/
+        for(int r=0;r<(double)2000;r+=snapScale) {
+            g2d.drawLine(0, (r)+(yoffset), width, (r)+(yoffset));
+        }
+        for(int w=0;w<(double)2000;w+=snapScale) {
             g2d.drawLine((w)+(xoffset), 0, (w)+(xoffset), height);
         }
         
@@ -201,8 +213,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
                 double realx = x-xoffset;
                 double realy = y-yoffset;
                 g2d.drawOval((int)realx+xoffset-(int)(nodesize/2),(int)realy+yoffset-(int)(nodesize/2),nodesize,nodesize);
-            }
-            else if(snap){
+            } else if(snap){
                 g2d.setColor(new Color(0,155,0));
                 Point mpoint = MouseInfo.getPointerInfo().getLocation();
                 double mx = mpoint.getX();
@@ -256,6 +267,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             g2d.drawOval((int)realx+xoffset-3,(int)realy+yoffset-3,6,6);
         }
         
+        double memdist = 0;
         if (memberconnected) {
             double xcord = (firstnode.getX()+xoffset);
             double ycord = (firstnode.getY()+yoffset);
@@ -280,6 +292,17 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             } else {
                 g.setColor(Color.BLACK);
             }
+            double x2 = x;
+            double x1 = xcord;
+            double y2 = y;
+            double y1 = ycord;
+            double dist = Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+            dist = ((double)((double)((int)(dist*100))))/100;
+            memdist = dist;
+            double midx = xcord+((x-xcord)/2);
+            double midy = ycord+((y-ycord)/2);
+            g.setFont(new Font("Dialog",Font.PLAIN,(int)(12/(Math.sqrt(zoomscale)))));
+            g.drawString(""+dist, (int)(midx+(20/zoomscale)),(int)(midy-(20/zoomscale)));
             g.drawLine((int)xcord,(int)ycord,(int)x,(int)y);
         }
         
@@ -295,7 +318,47 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             original.drawImage(lockimage,(int)mx-(int)fx,(int)my-(int)fy,this);
         }
         
+        Dimension d = this.getSize();
+        original.setColor(Color.BLACK);
+        original.fillRect((int)d.getWidth()-210,10,200,160);
+        original.setColor(Color.WHITE);
         
+        double mxcord = MouseInfo.getPointerInfo().getLocation().getX();
+        double mycord = MouseInfo.getPointerInfo().getLocation().getY();
+        Point dpoint = this.getLocationOnScreen();
+        mxcord -= dpoint.getX();
+        mycord -= dpoint.getY();
+        double xco = mxcord;
+        double yco = mycord;
+        xco -= width/2;
+        yco -= height/2;
+        xco/=zoomscale;
+        yco/=zoomscale;
+        xco += width/2;
+        yco += height/2;
+        double realxco = xco-xoffset;
+        double realyco = yco-yoffset;
+        realxco = ((double)((double)((int)(realxco*100))))/100;
+        realyco = ((double)((double)((int)(realyco*100))))/100;
+        original.drawString("Mouse(screen): (" + mxcord + "," + mycord + ")",(int)d.getWidth()-208,25);
+        original.drawString("Mouse(grid): (" + realxco + "," + realyco + ")",(int)d.getWidth()-208,40);
+        String lockstring = "unlocked";
+        if (locked) {
+            lockstring = "locked";
+        }
+        original.drawString("Lock Status: " + lockstring,(int)d.getWidth()-208,55);
+        original.drawString("Zoom Scale: " + zoomscale,(int)d.getWidth()-208,70);
+        original.drawString("Node Size: " + nodesize,(int)d.getWidth()-208,85);
+        original.drawString("Movement Speed: " + movespeed,(int)d.getWidth()-208,100);
+        original.drawString("Grid Size: " + snapScale,(int)d.getWidth()-208,115);
+        original.drawString("X offset: " + xoffset,(int)d.getWidth()-208,130);
+        original.drawString("Y offset: " + yoffset,(int)d.getWidth()-208,145);
+        String memlenstr = "N/A";
+        if (memberconnected) {
+            memlenstr = ""+memdist;
+        }
+        original.drawString("Member Length: " + memlenstr,(int)d.getWidth()-208,160);
+        //original.drawString("
         g2d.setColor(Color.GREEN);
         g2d.fillOval(-8+xoffset, -8+yoffset, 16, 16);
         //System.out.println(zoomscale);
@@ -344,8 +407,21 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             nodesize = tempval*2;
         } else if (source==movespeedslider) {
             movespeed = source.getValue();
+        } else if (source==snapsizeslider) {
+            snapScale = source.getValue();
         }
         superpanel.requestFocus();
+    }
+    public void itemStateChanged(ItemEvent e) {
+        JCheckBox source = (JCheckBox)e.getSource();
+        if (source==snapgridbox) {
+            if (source.isSelected()) {
+                snap = true;
+            } else {
+                snap = false;
+            }
+        }
+        
     }
     public void mouseClicked(double x, double y) {
         if (toolselected != 1) {
@@ -499,7 +575,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             }
         }
         superpanel.requestFocus();
-    }
+        }
     private double distance(double x1, double y1, double x2, double y2) {
         return Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)));
     }

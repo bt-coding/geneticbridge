@@ -1,6 +1,11 @@
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import javax.imageio.ImageIO;
+import java.util.*;
+import java.io.*;
 //import com.seaglasslookandfeel.*;
 public class DisplayInit {
     public static void main(String[] args) {
@@ -19,8 +24,19 @@ public class DisplayInit {
         JFrame frame = new JFrame("Genetic Truss Analysis");
         frame.setSize(WIDTH,HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        //frame.setUndecorated(true);
+        BufferedImage iconImage = null;
+        try {
+            iconImage = ImageIO.read(new File("splashimage.png"));
+        } catch (Exception e) {
+            System.out.println("Error occured while loading icon image");
+            e.printStackTrace();
+            return;
+        }
+        frame.setIconImage(iconImage);
         frame.setVisible(true);
-            
+
         JButton nodebutton = new JButton("node");
         JButton memberbutton = new JButton("member");
         JButton forcebutton = new JButton("force");
@@ -41,11 +57,13 @@ public class DisplayInit {
         controlpanel.add(clearbutton);
         controlpanel.add(simulatebutton);
         
-        controlpanel.setBackground(Color.GRAY);
-        
+        //controlpanel.setBackground(Color.GRAY);
+        controlpanel.setBackground(new Color(41, 163, 102));
         panel.add(controlpanel, BorderLayout.NORTH);
         
         controlpanel.setFocusable(false);
+        controlpanel.setPreferredSize(new Dimension(0,36));
+
         
         JPanel leftpanel = new JPanel();
         leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
@@ -57,7 +75,7 @@ public class DisplayInit {
         nodesize.setPaintLabels(true);
         
         JLabel nodesizetitle = new JLabel("Node Size");
-        nodesizetitle.setFont(new Font("TimesRoman", Font.PLAIN, 22));
+        nodesizetitle.setFont(new Font("Dialog", Font.BOLD, 22));
         
         JSlider movespeed = new JSlider(JSlider.HORIZONTAL,1,50,10);
         movespeed.setMajorTickSpacing(10);
@@ -66,19 +84,41 @@ public class DisplayInit {
         movespeed.setPaintLabels(true);
         
         JLabel movespeedtitle = new JLabel("Movement Speed");
-        movespeedtitle.setFont(new Font("TimesRoman", Font.PLAIN, 22));
+        movespeedtitle.setFont(new Font("Dialog", Font.BOLD, 22));
 
+        JSlider snapsize = new JSlider(JSlider.HORIZONTAL,1,41,5);
+        snapsize.setMajorTickSpacing(5);
+        snapsize.setMinorTickSpacing(1);
+        snapsize.setPaintTicks(true);
+        snapsize.setPaintLabels(true);
+        
+        JLabel snapsizetitle = new JLabel("Grid Size");
+        snapsizetitle.setFont(new Font("Dialog", Font.BOLD, 22));
+        
+        JCheckBox snapbox = new JCheckBox("Snap to Grid");
+        snapbox.setSelected(false);
+        snapbox.setMnemonic(KeyEvent.VK_S);
+        
         Box.Filler spacer = new Box.Filler(new Dimension(0,0),new Dimension(0,50),new Dimension(0,50));
         
-        leftpanel.add(spacer);
+        
+        //leftpanel.add(new Box.Filler(new Dimension(0,0),new Dimension(0,50),new Dimension(0,50)));
         leftpanel.add(nodesizetitle);
         leftpanel.add(nodesize);
         
-        leftpanel.add(spacer);
+        leftpanel.add(new Box.Filler(new Dimension(0,0),new Dimension(0,50),new Dimension(0,50)));
         leftpanel.add(movespeedtitle);
         leftpanel.add(movespeed);
         
-        leftpanel.setBackground(Color.GRAY);
+        leftpanel.add(new Box.Filler(new Dimension(0,0),new Dimension(0,50),new Dimension(0,50)));
+        leftpanel.add(snapsizetitle);
+        leftpanel.add(snapsize);
+        leftpanel.add(new Box.Filler(new Dimension(0,0),new Dimension(0,10),new Dimension(0,10)));
+        leftpanel.add(snapbox);
+        
+        
+        //leftpanel.setBackground(Color.GRAY);
+        leftpanel.setBackground(new Color(66, 138, 102));
         
         panel.add(leftpanel, BorderLayout.WEST);
         
@@ -90,7 +130,7 @@ public class DisplayInit {
         Bridge bridge = new Bridge(100,new double[]{-800,-400,800,400},forces,new ArrayList<Node>());
         //Bridge bridge = new Bridge();
         
-        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, movespeed, simulatebutton, WIDTH, HEIGHT, bridge);
+        Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, movespeed, snapsize, simulatebutton, snapbox, WIDTH, HEIGHT, bridge);
         
         
         panel.add(display, BorderLayout.CENTER);
