@@ -16,7 +16,7 @@ public class DisplayInit {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             //UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
         } catch (Exception e) {
-            System .err.println("Failed to set look and feel");
+            System.err.println("Failed to set look and feel");
             e.printStackTrace();
         }
         
@@ -35,7 +35,76 @@ public class DisplayInit {
             return;
         }
         frame.setIconImage(iconImage);
+        frame.setMinimumSize(new Dimension(800,500));
         frame.setVisible(true);
+        
+        JMenuBar menubar = new JMenuBar();
+        
+        JMenu fileMenu = new JMenu("File");
+        JMenu toolsMenu = new JMenu("Tools");
+        JMenu optionsMenu = new JMenu("Options");
+        JMenu helpMenu = new JMenu("Help");
+        
+        menubar.add(fileMenu);
+        menubar.add(toolsMenu);
+        menubar.add(optionsMenu);
+        menubar.add(helpMenu);
+        
+        JMenuItem newMenuButton = new JMenuItem("New");
+        JMenuItem saveMenuButton = new JMenuItem("Save");
+        JMenuItem saveAsMenuButton = new JMenuItem("Save As");
+        JMenuItem loadMenuButton = new JMenuItem("Load Existing");
+        
+        JMenuItem exportImageMenuButton = new JMenuItem("Export Image");
+        JMenuItem exportRawDataMenuButton = new JMenuItem("Export Raw Data");
+        
+        JMenuItem importPreferencesMenuButton = new JMenuItem("Import Preferences");
+        JMenuItem exportPreferencesMenuButton = new JMenuItem("Export Preferences");
+        
+        fileMenu.add(newMenuButton);
+        fileMenu.add(saveMenuButton);
+        fileMenu.add(saveAsMenuButton);
+        fileMenu.add(loadMenuButton);
+        fileMenu.addSeparator();
+        fileMenu.add(exportImageMenuButton);
+        fileMenu.add(exportRawDataMenuButton);
+        fileMenu.addSeparator();
+        fileMenu.add(importPreferencesMenuButton);
+        fileMenu.add(exportPreferencesMenuButton);
+        
+        JMenuItem consoleMenuButton = new JMenuItem("Console");
+        JMenuItem nodesMenuButton = new JMenuItem("Nodes");
+        JMenuItem membersMenuButton = new JMenuItem("Members");
+        JMenuItem forcesMenuButton = new JMenuItem("Forces");
+        JMenuItem supportsMenuButton = new JMenuItem("Supports");
+        JMenuItem materialsMenuButton = new JMenuItem("Materials");
+        JMenuItem sectionsMenuButton = new JMenuItem("Sections");
+        
+        toolsMenu.add(consoleMenuButton);
+        toolsMenu.addSeparator();
+        toolsMenu.add(nodesMenuButton);
+        toolsMenu.add(membersMenuButton);
+        toolsMenu.add(forcesMenuButton);
+        toolsMenu.add(supportsMenuButton);
+        toolsMenu.addSeparator();
+        toolsMenu.add(materialsMenuButton);
+        toolsMenu.add(sectionsMenuButton);
+        
+        JMenuItem preferencesMenuButton = new JMenuItem("Preferences");
+        JMenuItem settingsMenuButton = new JMenuItem("Settings");
+        
+        optionsMenu.add(preferencesMenuButton);
+        optionsMenu.add(settingsMenuButton);
+        
+        JMenuItem tutorialMenuButton = new JMenuItem("Tutorial");
+        JMenuItem guideMenuButton = new JMenuItem("Guide");
+        JMenuItem documentationMenuButton = new JMenuItem("Documentation");
+        
+        helpMenu.add(tutorialMenuButton);
+        helpMenu.add(guideMenuButton);
+        helpMenu.add(documentationMenuButton);
+
+        frame.setJMenuBar(menubar);
 
         JButton nodebutton = new JButton("node");
         JButton memberbutton = new JButton("member");
@@ -132,6 +201,7 @@ public class DisplayInit {
         
         Display display = new Display(panel,nodebutton, memberbutton, forcebutton, erasebutton, homebutton, clearbutton, nodesize, movespeed, snapsize, simulatebutton, snapbox, WIDTH, HEIGHT, bridge);
         
+        display.setMinimumSize(new Dimension(200,200));
         
         panel.add(display, BorderLayout.CENTER);
         
