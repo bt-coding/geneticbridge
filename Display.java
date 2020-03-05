@@ -230,16 +230,16 @@ public class Display extends JPanel implements ActionListener,ChangeListener,Ite
                 x += width/2;
                 y += height/2;
                 if(x%snapScale < snapScale/2){
-                    x -= x%snapScale;
+                    x -= x%snapScale-(xoffset%snapScale);
                 }
                 else{
-                    x += snapScale-(x%snapScale);
+                    x += snapScale-(x%snapScale)+(xoffset%snapScale);
                 }
                 if(y%snapScale < snapScale/2){
-                    y -= y%snapScale;
+                    y -= y%snapScale-(yoffset%snapScale);
                 }
                 else{
-                    y+= snapScale-(y%snapScale);
+                    y+= snapScale-(y%snapScale)+(yoffset%snapScale);
                 }
                 g2d.drawOval((int)x-(int)(nodesize/2),(int)y-(int)(nodesize/2),nodesize,nodesize);
             }
