@@ -16,7 +16,7 @@ public class DisplayInit {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             //UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
         } catch (Exception e) {
-            System.err.println("Failed to set look and feel");
+            System .err.println("Failed to set look and feel");
             e.printStackTrace();
         }
         
@@ -63,7 +63,7 @@ public class DisplayInit {
         
         controlpanel.setFocusable(false);
         controlpanel.setPreferredSize(new Dimension(0,36));
-
+        controlpanel.setMinimumSize(new Dimension(400,36));
         
         JPanel leftpanel = new JPanel();
         leftpanel.setLayout(new BoxLayout(leftpanel, BoxLayout.Y_AXIS));
