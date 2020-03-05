@@ -34,6 +34,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
     double movespeed;
     boolean simulating;
     boolean memberconnected;
+    int snapScale;
     Node firstnode;
     public Display(JPanel superpannel, JButton nodebutton, JButton memberbutton, JButton forcebutton, JButton erasebutton, JButton homebutton, JButton clearbutton, JSlider nodesizeslider, JSlider movespeedslider, JButton simulatebutton, int width, int height, Bridge b){
         super();
@@ -67,9 +68,10 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         nodesize=6;
         movespeed=10;
         this.b = b;
-        snap = false;
+        snap = true;
         simulating = false;
         memberconnected = false;
+        snapScale = 20;
         try {
             lockimage = ImageIO.read(new File("lock.png"));
         } catch (Exception e) {
@@ -180,24 +182,56 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
         
         if (toolselected == 0) {
             //node placement tool
-            g2d.setColor(new Color(0,155,0));
-            Point mpoint = MouseInfo.getPointerInfo().getLocation();
-            double mx = mpoint.getX();
-            double my = mpoint.getY();
-            Point dpoint = this.getLocationOnScreen();
-            double fx = dpoint.getX();
-            double fy = dpoint.getY();
-            double x = ((int)mx-(int)fx);
-            double y = ((int)my-(int)fy);
-            x -= width/2;
-            y -= height/2;
-            x/=zoomscale;
-            y/=zoomscale;
-            x += width/2;
-            y += height/2;
-            double realx = x-xoffset;
-            double realy = y-yoffset;
-            g2d.drawOval((int)realx+xoffset-(int)(nodesize/2),(int)realy+yoffset-(int)(nodesize/2),nodesize,nodesize);
+            if(!snap){
+                g2d.setColor(new Color(0,155,0));
+                Point mpoint = MouseInfo.getPointerInfo().getLocation();
+                double mx = mpoint.getX();
+                double my = mpoint.getY();
+                Point dpoint = this.getLocationOnScreen();
+                double fx = dpoint.getX();
+                double fy = dpoint.getY();
+                double x = ((int)mx-(int)fx);
+                double y = ((int)my-(int)fy);
+                x -= width/2;
+                y -= height/2;
+                x/=zoomscale;
+                y/=zoomscale;
+                x += width/2;
+                y += height/2;
+                double realx = x-xoffset;
+                double realy = y-yoffset;
+                g2d.drawOval((int)realx+xoffset-(int)(nodesize/2),(int)realy+yoffset-(int)(nodesize/2),nodesize,nodesize);
+            }
+            else if(snap){
+                g2d.setColor(new Color(0,155,0));
+                Point mpoint = MouseInfo.getPointerInfo().getLocation();
+                double mx = mpoint.getX();
+                double my = mpoint.getY();
+                Point dpoint = this.getLocationOnScreen();
+                double fx = dpoint.getX();
+                double fy = dpoint.getY();
+                double x = ((int)mx-(int)fx);
+                double y = ((int)my-(int)fy);
+                x -= width/2;
+                y -= height/2;
+                x/=zoomscale;
+                y/=zoomscale;
+                x += width/2;
+                y += height/2;
+                if(x%snapScale < snapScale/2){
+                    x -= x%snapScale;
+                }
+                else{
+                    x += snapScale-(x%snapScale);
+                }
+                if(y%snapScale < snapScale/2){
+                    y -= y%snapScale;
+                }
+                else{
+                    y+= snapScale-(y%snapScale);
+                }
+                g2d.drawOval((int)x-(int)(nodesize/2),(int)y-(int)(nodesize/2),nodesize,nodesize);
+            }
         } else if (toolselected == 3) {
             //erase tool
             g2d.setColor(new Color(255,0,0,100));
@@ -318,16 +352,42 @@ public class Display extends JPanel implements ActionListener,ChangeListener {
             memberconnected = false;
         }
         if (toolselected == 0) {
-            x -= width/2;
-            y -= height/2;
-            x/=zoomscale;
-            y/=zoomscale;
-            x += width/2;
-            y += height/2;
-            double realx = x-xoffset;
-            double realy = y-yoffset;
-            Node newn = new Node(realx,realy,locked);
-            b.addNode(newn,locked);
+            if(!snap){
+                x -= width/2;
+                y -= height/2;
+                x/=zoomscale;
+                y/=zoomscale;
+                x += width/2;
+                y += height/2;
+                double realx = x-xoffset;
+                double realy = y-yoffset;
+                Node newn = new Node(realx,realy,locked);
+                b.addNode(newn,locked);
+            }
+            else if(snap){
+                x -= width/2;
+                y -= height/2;
+                x/=zoomscale;
+                y/=zoomscale;
+                x += width/2;
+                y += height/2;
+                double realx = x-xoffset;
+                double realy = y-yoffset;
+                if(realx%snapScale < snapScale/2){
+                    realx -= x%snapScale;
+                }
+                else{
+                    realx += snapScale-(x%snapScale);
+                }
+                if(realy%snapScale < snapScale/2){
+                    realy -= y%snapScale;
+                }
+                else{
+                    realy+= snapScale-(y%snapScale);
+                }
+                Node newn = new Node(realx,realy,locked);
+                b.addNode(newn,locked);
+            }
         } else if (toolselected == 1) {
             if (!memberconnected) {
                 x-= width/2;
