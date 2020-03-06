@@ -421,7 +421,7 @@ public class Display extends JPanel implements ActionListener,ChangeListener,Ite
                 snap = false;
             }
         }
-        
+        superpanel.requestFocus();
     }
     public void mouseClicked(double x, double y) {
         if (toolselected != 1) {

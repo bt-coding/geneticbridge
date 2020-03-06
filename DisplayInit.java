@@ -62,6 +62,7 @@ public class DisplayInit {
         JMenuItem exportPreferencesMenuButton = new JMenuItem("Export Preferences");
         
         fileMenu.add(newMenuButton);
+        fileMenu.addSeparator();
         fileMenu.add(saveMenuButton);
         fileMenu.add(saveAsMenuButton);
         fileMenu.add(loadMenuButton);
