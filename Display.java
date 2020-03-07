@@ -229,19 +229,21 @@ public class Display extends JPanel implements ActionListener,ChangeListener,Ite
                 y/=zoomscale;
                 x += width/2;
                 y += height/2;
-                if(x%snapScale < snapScale/2){
-                    x -= x%snapScale-(xoffset%snapScale);
+                double realx = x-xoffset;
+                double realy = y-yoffset;
+                if(realx%snapScale < snapScale/2){
+                    realx -= realx%snapScale;
                 }
                 else{
-                    x += snapScale-(x%snapScale)+(xoffset%snapScale);
+                    realx += snapScale-(realx%snapScale);
                 }
-                if(y%snapScale < snapScale/2){
-                    y -= y%snapScale-(yoffset%snapScale);
+                if(realy%snapScale < snapScale/2){
+                    realy -= realy%snapScale;
                 }
                 else{
-                    y+= snapScale-(y%snapScale)+(yoffset%snapScale);
+                    realy += snapScale-(realy%snapScale);
                 }
-                g2d.drawOval((int)x-(int)(nodesize/2),(int)y-(int)(nodesize/2),nodesize,nodesize);
+                g2d.drawOval((int)realx+xoffset-(int)(nodesize/2),(int)realy+yoffset-(int)(nodesize/2),nodesize,nodesize);
             }
         } else if (toolselected == 3) {
             //erase tool
@@ -450,16 +452,16 @@ public class Display extends JPanel implements ActionListener,ChangeListener,Ite
                 double realx = x-xoffset;
                 double realy = y-yoffset;
                 if(realx%snapScale < snapScale/2){
-                    realx -= x%snapScale-(xoffset%snapScale);
+                    realx -= realx%snapScale;
                 }
                 else{
-                    realx += snapScale-(x%snapScale)+(xoffset%snapScale);
+                    realx += snapScale-(realx%snapScale);
                 }
                 if(realy%snapScale < snapScale/2){
-                    realy -= y%snapScale-(yoffset%snapScale);
+                    realy -= realy%snapScale;
                 }
                 else{
-                    realy+= snapScale-(y%snapScale)+(yoffset%snapScale);
+                    realy += snapScale-(realy%snapScale);
                 }
                 Node newn = new Node(realx,realy,locked);
                 b.addNode(newn,locked);
