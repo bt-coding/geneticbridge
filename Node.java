@@ -2,10 +2,12 @@ public class Node {
     double x;
     double y;
     boolean locked;
+    long ID;
     public Node(double x, double y, boolean lock) {
         this.x = x;
         this.y = y;
         locked = lock;
+        ID = System.nanoTime();
     }
     public void setX(double x) {
         this.x = x;
@@ -45,5 +47,8 @@ public class Node {
             lockstring = "locked";
         }
         return "(" + x + "," + y + ") " +lockstring;
+    }
+    public long getID() {
+        return ID;
     }
 }
