@@ -6,7 +6,8 @@ public class Member {
     private double rightLoadHPercent;
     private double rightLoadVPercent;
     //angle to horizon in radians
-    double angle;
+    double angleOne;
+    double angleTwo;
     double forceApplied;
     public Member(Node n1, Node n2) {
         this.n1 = n1;

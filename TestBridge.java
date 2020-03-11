@@ -7,39 +7,62 @@ public class TestBridge{
             members.add(new Member(mem.get(0),mem.get(1)));
         }
         for(Member mem: members){
-            mem.angle = Math.atan((mem.getNodeOne().y-mem.getNodeTwo().y)/(mem.getNodeTwo().x-mem.getNodeOne().x));
+            mem.angleOne = Math.atan((mem.getNodeTwo().y-mem.getNodeOne().y)/(mem.getNodeTwo().x-mem.getNodeOne().x));
         }
+        for(Member mem: members){
+            mem.angleTwo = Math.atan((mem.getNodeOne().y-mem.getNodeTwo().y)/(mem.getNodeOne().x-mem.getNodeTwo().x));
+        }
+        for(Node n: forces){
+                calcLoadPercents(n,connectedNodes(n,members));
+            }
         double force = 0.5;
         while(!broken(members,maxTen,maxCom)){
-            for(Node n: forces){
-                applyForceToMem(force,n,members);
-            }
+            
             force += 0.5;
         }
         return members;
     }
-    public static void applyForceToMem(double force, Node node,ArrayList<Member> members){
+    public static ArrayList<Member> connectedNodes(Node node, ArrayList<Member> mems){
         ArrayList<Member> connected = new ArrayList<Member>();
-        for(Member mem: members){
+        for(Member mem: mems){
             if(mem.getNodeOne() == node || mem.getNodeTwo() == node){
                 connected.add(mem);
             }
         }
-        
-    }   
-    public static double getPercentLoadHorzontally(ArrayList<Member> mems,Node n,Member m){
-        double sum = 0;
-        for(Member mem: mems){
-            sum += Math.abs(Math.cos(mem.angle));
+        return connected;
+    }
+    public static void calcLoadPercents( Node node,ArrayList<Member> connected){
+        for(Member mem: connected){
+            if(mem.getNodeOne() == node){
+                mem.setLeftLoadHPercent(getPercentLoadHorizontally(connected, mem,1));
+            }
+            else{
+                mem.setRightLoadHPercent(getPercentLoadHorizontally(connected,mem,1));
+            }
         }
-        return Math.abs(Math.cos(m.angle))/sum;
+    }   
+    public static double getPercentLoadHorizontally(ArrayList<Member> mems,Member m,int angleNum){
+        if(angleNum == 1){
+            double sum = 0;
+            for(Member mem: mems){
+                sum += Math.abs(Math.cos(mem.angleOne));
+            }
+            return Math.abs(Math.cos(m.angleOne))/sum;
+        }
+        else{
+            double sum = 0;
+            for(Member mem: mems){
+                sum += Math.abs(Math.cos(mem.angleTwo));
+            }
+            return Math.abs(Math.cos(m.angleTwo))/sum;
+        }
     }
     public static double getPercentLoadVertically(ArrayList<Member> mems,Node n,Member m){
         double sum = 0;
         for(Member mem: mems){
-            sum += Math.abs(Math.sin(mem.angle));
+            sum += Math.abs(Math.sin(mem.angleOne));
         }
-        return Math.abs(Math.sin(m.angle))/sum;
+        return Math.abs(Math.sin(m.angleOne))/sum;
     }
     public static boolean broken(ArrayList<Member> mems, double maxT, double maxC){
         for(Member mem: mems){
